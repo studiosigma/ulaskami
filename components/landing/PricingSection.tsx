@@ -10,9 +10,10 @@ export function PricingSection() {
     {
       id: "single",
       name: "Ulaskami Single Plate",
-      badge: "Paling Populer",
-      isPopular: true,
-      price: "Rp 149.000",
+      badge: "Diskon 50%",
+      isPopular: false,
+      price: "Rp 75.000",
+      originalPrice: "Rp 149.000",
       description: "Ideal untuk 1 meja kasir, reception desk, atau area kasir utama bisnis Anda.",
       features: [
         "1x Ulaskami NFC + QR Acrylic Plate",
@@ -26,15 +27,16 @@ export function PricingSection() {
       ],
       ctaText: "Beli Sekarang",
       ctaLink: SITE_CONFIG.getWhatsAppLink(
-        "Halo Ulaskami, saya ingin memesan 1 Ulaskami Review Plate"
+        "Halo Ulaskami, saya ingin memesan 1 Ulaskami Review Plate (Promo Rp 75.000)"
       ),
     },
     {
       id: "bundle-3",
       name: "Paket 3 Plates (Cafe & Resto)",
-      badge: "Hemat 15%",
-      isPopular: false,
-      price: "Rp 389.000",
+      badge: "Paling Populer • Hemat 46%",
+      isPopular: true,
+      price: "Rp 210.000",
+      originalPrice: "Rp 389.000",
       description: "Pilihan terbaik untuk kafe, resto, atau klinik dengan beberapa meja & kasir.",
       features: [
         "3x Ulaskami NFC + QR Acrylic Plate",
@@ -48,7 +50,7 @@ export function PricingSection() {
       ],
       ctaText: "Beli Paket 3 Plate",
       ctaLink: SITE_CONFIG.getWhatsAppLink(
-        "Halo Ulaskami, saya ingin memesan Paket 3 Ulaskami Plate"
+        "Halo Ulaskami, saya ingin memesan Paket 3 Ulaskami Plate (Promo Rp 210.000)"
       ),
     },
     {
@@ -57,6 +59,7 @@ export function PricingSection() {
       badge: "Custom Batch",
       isPopular: false,
       price: "Hubungi Kami",
+      originalPrice: undefined,
       description: "Untuk bisnis waralaba, hotel, atau jaringan ritel dengan 10+ cabang.",
       features: [
         "Jumlah plate fleksibel (10+ pcs)",
@@ -127,6 +130,16 @@ export function PricingSection() {
                 </p>
 
                 <div className="mb-6 pb-6 border-b border-gray-100">
+                  {plan.originalPrice && (
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-sm font-semibold text-gray-400 line-through">
+                        {plan.originalPrice}
+                      </span>
+                      <span className="text-[11px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-100">
+                        Hemat Spesial
+                      </span>
+                    </div>
+                  )}
                   <div className="flex items-baseline gap-1">
                     <span className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">
                       {plan.price}
