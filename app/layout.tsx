@@ -33,6 +33,15 @@ export const metadata: Metadata = {
   authors: [{ name: "Ulaskami", url: "https://ulaskami.id" }],
   creator: "Ulaskami",
   publisher: "Ulaskami",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
   openGraph: {
     type: "website",
     locale: "id_ID",
@@ -41,12 +50,21 @@ export const metadata: Metadata = {
     description:
       "Permudah pelanggan memberikan ulasan di Google Maps dengan Ulaskami NFC + QR Review Plate. Buat bisnismu semakin direkomendasikan di Google Maps.",
     siteName: "Ulaskami",
+    images: [
+      {
+        url: "/icon.png",
+        width: 512,
+        height: 512,
+        alt: "Ulaskami Google Review Icon",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Ulaskami — Buat Bisnismu Semakin Direkomendasikan di Google Maps",
     description:
       "Permudah pelanggan memberikan ulasan di Google Maps dengan Ulaskami NFC + QR Review Plate. Buat bisnismu semakin direkomendasikan di Google Maps.",
+    images: ["/icon.png"],
   },
 };
 
@@ -60,7 +78,7 @@ export default function RootLayout({
       lang="id"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased scroll-smooth`}
     >
-      <body className="min-h-full flex flex-col bg-white text-gray-900 font-sans selection:bg-green-100 selection:text-green-900">
+      <body className="min-h-full flex flex-col bg-white text-gray-900 font-sans selection:bg-[#4285F4] selection:text-white">
         {children}
       </body>
     </html>

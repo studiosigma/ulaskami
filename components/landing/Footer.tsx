@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { SITE_CONFIG } from "@/lib/config";
 
@@ -15,13 +16,15 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           {/* Brand Info */}
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2.5">
-              <div className="relative w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-white font-black text-sm shadow-xs overflow-hidden">
-                <span className="absolute top-1 left-1 w-1.5 h-1.5 rounded-full bg-[#4285F4]" />
-                <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-[#EA4335]" />
-                <span className="absolute bottom-1 right-1 w-1.5 h-1.5 rounded-full bg-[#34A853]" />
-                <span className="absolute bottom-1 left-1 w-1.5 h-1.5 rounded-full bg-[#FBBC05]" />
-                <span className="relative z-10 text-white font-black">U</span>
+            <Link href="/" className="flex items-center gap-2.5 group">
+              <div className="relative w-9 h-10 shrink-0 group-hover:scale-105 transition-transform duration-200 flex items-center justify-center">
+                <Image
+                  src="/logo-icon.png"
+                  alt="Ulaskami Logo"
+                  width={36}
+                  height={42}
+                  className="w-auto h-9 object-contain drop-shadow-xs"
+                />
               </div>
               <div className="flex flex-col">
                 <span className="text-xl font-black tracking-tight text-white leading-none">

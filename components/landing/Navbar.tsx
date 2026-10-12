@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, X, ArrowRight } from "lucide-react";
 
 export function Navbar() {
@@ -48,15 +49,19 @@ export function Navbar() {
         <div className="flex items-center justify-between">
           {/* Brand Logo */}
           <Link href="/" className="flex items-center gap-2.5 group">
-            {/* Google 4-Color Icon Badge */}
-            <div className="relative w-9 h-9 rounded-xl bg-gradient-to-br from-[#1A73E8] to-[#1557B0] flex items-center justify-center text-white font-black shadow-md shadow-blue-600/25 group-hover:scale-105 transition-transform duration-200 overflow-hidden border border-white/40">
-              <span className="text-base tracking-tighter z-10">U</span>
-              <span className="absolute top-0.5 right-0.5 w-1.5 h-1.5 rounded-full bg-[#EA4335]" />
-              <span className="absolute bottom-0.5 left-0.5 w-1.5 h-1.5 rounded-full bg-[#34A853]" />
-              <span className="absolute bottom-0.5 right-0.5 w-1.5 h-1.5 rounded-full bg-[#FBBC04]" />
+            {/* Custom Google Maps Star Pin Logo */}
+            <div className="relative w-9 h-10 shrink-0 group-hover:scale-105 transition-transform duration-200 flex items-center justify-center">
+              <Image
+                src="/logo-icon.png"
+                alt="Ulaskami Logo"
+                width={36}
+                height={42}
+                className="w-auto h-9 object-contain drop-shadow-2xs"
+                priority
+              />
             </div>
             <div className="flex flex-col">
-              <span className="text-lg font-black tracking-tight text-gray-900 leading-none flex items-center gap-1">
+              <span className="text-lg font-black tracking-tight text-gray-900 leading-none flex items-center gap-1 group-hover:text-[#1A73E8] transition-colors">
                 <span>ULASKAMI</span>
                 <span className="flex items-center gap-0.5 ml-0.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#4285F4]" />

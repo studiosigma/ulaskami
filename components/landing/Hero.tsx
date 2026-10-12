@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, CheckCircle2, Shield, Zap } from "lucide-react";
 import { ProductMockup } from "./ProductMockup";
 
@@ -19,14 +20,16 @@ export function Hero() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           {/* Left Column: Copy & CTAs */}
           <div className="lg:col-span-7 flex flex-col text-left">
-            {/* Google 4-Color Pill Badge */}
-            <div className="inline-flex items-center gap-2.5 self-start bg-white/95 border border-slate-200/90 px-4 py-1.5 rounded-full mb-6 text-xs sm:text-sm font-semibold text-slate-800 shadow-xs">
-              <div className="flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-[#4285F4]" />
-                <span className="w-2 h-2 rounded-full bg-[#EA4335]" />
-                <span className="w-2 h-2 rounded-full bg-[#FBBC05]" />
-                <span className="w-2 h-2 rounded-full bg-[#34A853]" />
-              </div>
+            {/* Google 4-Color Pill Badge with Custom Pin Logo */}
+            <div className="inline-flex items-center gap-2 self-start bg-white/95 border border-slate-200/90 pl-2.5 pr-4 py-1.5 rounded-full mb-6 text-xs sm:text-sm font-semibold text-slate-800 shadow-xs">
+              <Image
+                src="/logo-icon.png"
+                alt="Ulaskami Logo Pin"
+                width={18}
+                height={21}
+                className="w-4.5 h-auto object-contain shrink-0"
+                priority
+              />
               <span>NFC + QR Google Review Plate untuk Bisnis Anda</span>
             </div>
 
