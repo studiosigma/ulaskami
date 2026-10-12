@@ -17,7 +17,6 @@ export function ProductMockup({
   const [selectedTheme, setSelectedTheme] = useState<PlaqueTheme>("google_signature");
   const [mountType, setMountType] = useState<"glass_counter" | "table_stand">("table_stand");
   const [businessName, setBusinessName] = useState(defaultBusinessName);
-  const [showDimensions, setShowDimensions] = useState(true);
 
   const sampleNames = [
     "Kopi Kenangan Senopati",
@@ -37,15 +36,6 @@ export function ProductMockup({
               <Layers className="w-3.5 h-3.5 text-amber-600" />
               <span>Model Fisik Akrilik:</span>
             </span>
-            {mountType === "table_stand" && (
-              <button
-                type="button"
-                onClick={() => setShowDimensions(!showDimensions)}
-                className="text-[10px] text-green-700 bg-green-50 hover:bg-green-100 font-bold px-2 py-0.5 rounded-md border border-green-200 transition-colors cursor-pointer"
-              >
-                {showDimensions ? "✓ Ukuran Fisik Aktif" : "+ Tampilkan Ukuran"}
-              </button>
-            )}
           </div>
           <div className="grid grid-cols-2 gap-1.5 w-full bg-gray-100/90 p-1 rounded-2xl border border-gray-200/90 shadow-2xs">
             <button
@@ -185,39 +175,7 @@ export function ProductMockup({
         {/* MODEL 1: STAND MEJA KASIR (L-STAND PERSIS FOTO PENGGUNA)                  */}
         {/* ========================================================================= */}
         {mountType === "table_stand" && (
-          <div className="relative w-full flex flex-col items-center py-4 animate-in fade-in zoom-in-95 duration-200">
-            {/* DIMENSION BADGES (PERSIS DI FOTO DENGAN HIGHLIGHT HIJAU) */}
-            {showDimensions && (
-              <>
-                {/* Lebar Atas: 4.1" (10.5 CM) */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 z-40 bg-zinc-900/90 backdrop-blur-md text-white text-[11px] font-extrabold px-3 py-1 rounded-xl shadow-xl border border-zinc-700/80 flex items-center gap-2">
-                  <span className="text-zinc-400 text-xs">◀</span>
-                  <span>
-                    4.1″ <span className="text-[#4ade80] font-black">(10.5 CM)</span>
-                  </span>
-                  <span className="text-zinc-400 text-xs">▶</span>
-                </div>
-
-                {/* Tinggi Kanan: 5.8" (14.8 CM) */}
-                <div className="absolute top-1/2 -right-2 sm:-right-8 -translate-y-1/2 z-40 bg-zinc-900/90 backdrop-blur-md text-white text-[11px] font-extrabold px-3 py-1.5 rounded-xl shadow-xl border border-zinc-700/80 flex flex-col items-center justify-center leading-tight">
-                  <span className="text-zinc-400 text-[10px]">▲</span>
-                  <span className="my-0.5">
-                    5.8″ <span className="text-[#4ade80] font-black block sm:inline">(14.8 CM)</span>
-                  </span>
-                  <span className="text-zinc-400 text-[10px]">▼</span>
-                </div>
-
-                {/* Kedalaman Kaki Bawah: 2.4" (6 CM) */}
-                <div className="absolute -bottom-3 left-1 sm:-left-6 z-40 bg-zinc-900/90 backdrop-blur-md text-white text-[11px] font-extrabold px-3 py-1 rounded-xl shadow-xl border border-zinc-700/80 flex items-center gap-1.5">
-                  <span className="text-zinc-400 text-xs">◀</span>
-                  <span>
-                    2.4″ <span className="text-[#4ade80] font-black">(6 CM)</span>
-                  </span>
-                  <span className="text-zinc-400 text-xs">▶</span>
-                </div>
-              </>
-            )}
-
+          <div className="relative w-full flex flex-col items-center py-2 animate-in fade-in zoom-in-95 duration-200">
             {/* THE L-STAND SLANTED BOARD (PORTRAIT A6: 10.5 x 14.8 CM) */}
             <div
               className={`relative w-[280px] sm:w-[305px] h-[395px] sm:h-[425px] rounded-t-2xl p-4 sm:p-5 flex flex-col justify-between items-center text-center shadow-2xl transition-all duration-300 border ${
@@ -344,15 +302,20 @@ export function ProductMockup({
               <div className="w-full flex items-center justify-center gap-4 sm:gap-6 py-1">
                 {/* Left: Tap Phone */}
                 <div className="flex flex-col items-center">
-                  <div className="flex items-center gap-1 mb-0.5">
-                    <svg className="w-4 h-5 fill-none" viewBox="0 0 24 32" stroke="currentColor" strokeWidth="2.2">
-                      <path d="M 6 8 A 8 8 0 0 0 6 24" />
-                      <path d="M 2 4 A 14 14 0 0 0 2 28" />
+                  <div className="relative w-6 h-9 rounded-md border-2 border-current flex flex-col items-center justify-center mb-0.5 shadow-2xs">
+                    <div className="w-1 h-0.5 rounded-full bg-current mb-0.5 opacity-70" />
+                    <svg
+                      className="w-3.5 h-3.5"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                    >
+                      <path d="M 8 16 A 5 5 0 0 1 8 8" />
+                      <path d="M 12 19 A 9 9 0 0 1 12 5" />
                     </svg>
-                    <div className="w-6 h-9 rounded-md border-2 border-current flex flex-col items-center justify-center">
-                      <div className="w-1 h-1 rounded-full bg-current mb-0.5" />
-                      <span className="text-[6.5px] font-black border border-current px-0.5 rounded leading-none">NFC</span>
-                    </div>
+                    <div className="w-2 h-0.5 rounded-xs bg-current mt-0.5 opacity-70" />
                   </div>
                   <span className="text-[10px] font-extrabold tracking-wide uppercase">Tap</span>
                 </div>
