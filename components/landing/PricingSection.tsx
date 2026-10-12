@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Check, Sparkles, ArrowRight, ShieldCheck, Palette } from "lucide-react";
+import { Check, ArrowRight, ShieldCheck, Palette } from "lucide-react";
 import { SITE_CONFIG } from "@/lib/config";
 
 export function PricingSection() {
@@ -19,7 +19,7 @@ export function PricingSection() {
         "1x Ulaskami NFC + QR Acrylic Plate",
         "Tema Utama: Google 4-Color (Signature Ready Stock)",
         "Matte Black & Frost Gold (Pre-Order / Coming Soon)",
-        "Dudukan akrilik elegan (Stand included)",
+        "Dudukan akrilik meja (Stand included)",
         "NFC Chip respons instan",
         "Custom laser QR code resolusi tinggi",
         "Aktivasi mandiri instan (< 2 menit)",
@@ -86,9 +86,14 @@ export function PricingSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="max-w-3xl mx-auto text-center mb-16">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-50 border border-green-200 text-xs font-semibold text-green-800 mb-4">
-            <Sparkles className="w-3.5 h-3.5 text-green-600" />
-            <span>Transparan & Sekali Bayar</span>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-50 border border-slate-200/90 text-xs font-semibold text-slate-800 shadow-2xs mb-4">
+            <div className="flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#4285F4]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#EA4335]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#FBBC05]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#34A853]" />
+            </div>
+            <span>Transparan &amp; Sekali Bayar</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 tracking-tight">
             Investasi Sekali. Panen Review Selamanya.
@@ -103,19 +108,24 @@ export function PricingSection() {
           {pricingPlans.map((plan) => (
             <div
               key={plan.id}
-              className={`relative rounded-3xl p-8 flex flex-col justify-between transition-all duration-200 ${
+              className={`relative rounded-3xl p-8 flex flex-col justify-between transition-all duration-200 overflow-hidden ${
                 plan.isPopular
-                  ? "bg-white border-2 border-green-600 shadow-xl shadow-green-950/10 ring-4 ring-green-600/10"
-                  : "bg-white border border-gray-200 shadow-sm hover:border-gray-300 hover:shadow-md"
+                  ? "bg-white border-2 border-[#1A73E8] shadow-xl shadow-blue-950/10 ring-4 ring-blue-600/10"
+                  : "bg-white border border-gray-200 shadow-xs hover:border-gray-300 hover:shadow-md"
               }`}
             >
+              {/* Google 4-color top accent bar for Popular Plan */}
+              {plan.isPopular && (
+                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#4285F4] via-[#EA4335] via-[#FBBC05] to-[#34A853]" />
+              )}
+
               {/* Top Badge for Popular Plan */}
               {plan.badge && (
-                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
+                <div className="absolute top-4 right-5 sm:top-5 sm:right-6">
                   <span
-                    className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
+                    className={`px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${
                       plan.isPopular
-                        ? "bg-green-600 text-white shadow-sm"
+                        ? "bg-[#1A73E8] text-white shadow-xs"
                         : "bg-gray-100 text-gray-700 border border-gray-200"
                     }`}
                   >
@@ -126,7 +136,7 @@ export function PricingSection() {
 
               <div>
                 {/* Plan Title & Price */}
-                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                <h3 className="text-xl font-bold text-gray-900 mb-2 mt-2">
                   {plan.name}
                 </h3>
                 <p className="text-xs text-gray-500 mb-6 leading-relaxed min-h-[36px]">
@@ -139,7 +149,7 @@ export function PricingSection() {
                       <span className="text-sm font-semibold text-gray-400 line-through">
                         {plan.originalPrice}
                       </span>
-                      <span className="text-[11px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-100">
+                      <span className="text-[11px] font-bold text-[#EA4335] bg-red-50 px-2 py-0.5 rounded-full border border-red-100">
                         Hemat Spesial
                       </span>
                     </div>
@@ -149,7 +159,7 @@ export function PricingSection() {
                       {plan.price}
                     </span>
                   </div>
-                  <span className="text-xs font-semibold text-green-700 bg-green-50 px-2 py-0.5 rounded mt-2 inline-block">
+                  <span className="text-xs font-semibold text-[#1A73E8] bg-blue-50 px-2.5 py-0.5 rounded mt-2 inline-block border border-blue-100/60">
                     One-time purchase (Beli Sekali)
                   </span>
                 </div>
@@ -158,7 +168,7 @@ export function PricingSection() {
                 <ul className="space-y-3 mb-8">
                   {plan.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start gap-2.5 text-sm text-gray-700">
-                      <div className="w-5 h-5 rounded-full bg-green-100 text-green-700 flex items-center justify-center shrink-0 mt-0.5">
+                      <div className="w-5 h-5 rounded-full bg-emerald-50 text-[#34A853] border border-emerald-100 flex items-center justify-center shrink-0 mt-0.5">
                         <Check className="w-3 h-3 stroke-[3]" />
                       </div>
                       <span>{feature}</span>
@@ -175,7 +185,7 @@ export function PricingSection() {
                   rel="noopener noreferrer"
                   className={`w-full py-3.5 px-4 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all duration-200 ${
                     plan.isPopular
-                      ? "bg-green-600 hover:bg-green-700 text-white shadow-md shadow-green-600/20 active:scale-98"
+                      ? "bg-[#1A73E8] hover:bg-[#1557B0] text-white shadow-md shadow-blue-600/25 active:scale-98"
                       : "bg-gray-900 hover:bg-black text-white active:scale-98"
                   }`}
                 >
@@ -194,27 +204,33 @@ export function PricingSection() {
         </div>
 
         {/* 3 Themes Banner */}
-        <div className="mt-12 max-w-2xl mx-auto text-center bg-gray-50 border border-gray-200/90 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <div className="mt-12 max-w-2xl mx-auto text-center bg-slate-50 border border-slate-200/90 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-center gap-3">
           <div className="flex items-center gap-1.5 text-xs font-bold text-gray-800">
-            <Palette className="w-4 h-4 text-blue-600" />
+            <Palette className="w-4 h-4 text-[#1A73E8]" />
             <span>Pilihan Tema Desain:</span>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-gray-700">
             <span className="bg-white px-2.5 py-1 rounded-lg border border-gray-200 shadow-2xs font-semibold flex items-center gap-1.5 text-gray-900">
-              <span>🎨 Google 4-Color</span>
-              <span className="text-[10px] text-green-700 bg-green-50 font-bold px-1.5 py-0.2 rounded">
+              <div className="flex items-center gap-0.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#4285F4]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#EA4335]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#FBBC05]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#34A853]" />
+              </div>
+              <span>Google 4-Color</span>
+              <span className="text-[10px] text-[#2E7D32] bg-emerald-50 font-bold px-1.5 py-0.2 rounded border border-emerald-100">
                 Ready Stock
               </span>
             </span>
             <span className="bg-white px-2.5 py-1 rounded-lg border border-gray-200 shadow-2xs font-semibold flex items-center gap-1.5 text-gray-600">
               <span>🖤 Dark Luxury Matte</span>
-              <span className="text-[10px] text-amber-700 bg-amber-50 font-bold px-1.5 py-0.2 rounded">
+              <span className="text-[10px] text-amber-700 bg-amber-50 font-bold px-1.5 py-0.2 rounded border border-amber-100">
                 Coming Soon
               </span>
             </span>
             <span className="bg-white px-2.5 py-1 rounded-lg border border-gray-200 shadow-2xs font-semibold flex items-center gap-1.5 text-gray-600">
               <span>⭐ Frost White &amp; Gold</span>
-              <span className="text-[10px] text-amber-700 bg-amber-50 font-bold px-1.5 py-0.2 rounded">
+              <span className="text-[10px] text-amber-700 bg-amber-50 font-bold px-1.5 py-0.2 rounded border border-amber-100">
                 Coming Soon
               </span>
             </span>
@@ -223,8 +239,8 @@ export function PricingSection() {
 
         {/* Bottom guarantee strip */}
         <div className="mt-6 text-center text-xs text-gray-500 max-w-xl mx-auto flex items-center justify-center gap-2">
-          <ShieldCheck className="w-4 h-4 text-green-600 shrink-0" />
-          <span>Pengiriman ke seluruh Indonesia via JNE, J&T, SiCepat &amp; Anteraja.</span>
+          <ShieldCheck className="w-4 h-4 text-[#1A73E8] shrink-0" />
+          <span>Pengiriman ke seluruh Indonesia via JNE, J&amp;T, SiCepat &amp; Anteraja.</span>
         </div>
       </div>
     </section>

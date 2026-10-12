@@ -2,12 +2,21 @@
 
 @layer base {
   :root {
-    --brand-primary: #16a34a;
-    --brand-dark: #14532d;
-    --brand-light: #f0fdf4;
+    --brand-primary: #1a73e8;
+    --google-blue: #4285f4;
+    --google-red: #ea4335;
+    --google-yellow: #fbbc05;
+    --google-green: #34a853;
+    --brand-dark: #0f172a;
+    --brand-light: #f8fafc;
     --brand-text: #111827;
-    --brand-muted: #6b7280;
-    --brand-border: #e5e7eb;
+    --brand-muted: #64748b;
+    --brand-border: #e2e8f0;
+  }
+
+  ::selection {
+    background-color: #4285f4;
+    color: #ffffff;
   }
 
   html {

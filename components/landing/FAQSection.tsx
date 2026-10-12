@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { ChevronDown, HelpCircle } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { SITE_CONFIG } from "@/lib/config";
 
 export function FAQSection() {
@@ -55,12 +55,17 @@ export function FAQSection() {
   };
 
   return (
-    <section id="faq" className="py-20 sm:py-28 bg-gray-50/50 border-t border-gray-100">
+    <section id="faq" className="py-20 sm:py-28 bg-slate-50/50 border-t border-gray-100">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-14">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-50 border border-green-200 text-xs font-semibold text-green-800 mb-4">
-            <HelpCircle className="w-3.5 h-3.5 text-green-600" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-200/90 text-xs font-semibold text-slate-800 shadow-2xs mb-4">
+            <div className="flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#4285F4]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#EA4335]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#FBBC05]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#34A853]" />
+            </div>
             <span>Pertanyaan yang Sering Diajukan</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">
@@ -80,7 +85,7 @@ export function FAQSection() {
                 key={index}
                 className={`bg-white rounded-2xl border transition-all duration-200 overflow-hidden ${
                   isOpen
-                    ? "border-green-300 shadow-sm"
+                    ? "border-[#1A73E8]/50 shadow-xs"
                     : "border-gray-200 hover:border-gray-300"
                 }`}
               >
@@ -95,7 +100,7 @@ export function FAQSection() {
                   <div
                     className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-200 ${
                       isOpen
-                        ? "bg-green-100 text-green-700 rotate-180"
+                        ? "bg-blue-50 text-[#1A73E8] rotate-180"
                         : "bg-gray-100 text-gray-500"
                     }`}
                   >
@@ -122,7 +127,7 @@ export function FAQSection() {
             )}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-green-700 font-semibold underline hover:text-green-800"
+            className="text-[#1A73E8] font-semibold underline hover:text-[#1557B0]"
           >
             Hubungi Tim Support kami via WhatsApp
           </a>

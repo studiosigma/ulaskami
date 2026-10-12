@@ -37,23 +37,36 @@ export function Navbar() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? "bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-100 py-3"
-          : "bg-white/70 backdrop-blur-sm py-4 border-b border-gray-100/50"
+          ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100"
+          : "bg-white/85 backdrop-blur-sm border-b border-gray-100/60"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Google 4-Color Signature Brandline */}
+      <div className="h-1 w-full bg-gradient-to-r from-[#4285F4] via-[#EA4335] via-[#FBBC05] to-[#34A853]" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
         <div className="flex items-center justify-between">
           {/* Brand Logo */}
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-xl bg-green-600 flex items-center justify-center text-white font-bold shadow-md shadow-green-600/20 group-hover:scale-105 transition-transform duration-200">
-              <span className="text-base tracking-tighter">U</span>
+            {/* Google 4-Color Icon Badge */}
+            <div className="relative w-9 h-9 rounded-xl bg-gradient-to-br from-[#1A73E8] to-[#1557B0] flex items-center justify-center text-white font-black shadow-md shadow-blue-600/25 group-hover:scale-105 transition-transform duration-200 overflow-hidden border border-white/40">
+              <span className="text-base tracking-tighter z-10">U</span>
+              <span className="absolute top-0.5 right-0.5 w-1.5 h-1.5 rounded-full bg-[#EA4335]" />
+              <span className="absolute bottom-0.5 left-0.5 w-1.5 h-1.5 rounded-full bg-[#34A853]" />
+              <span className="absolute bottom-0.5 right-0.5 w-1.5 h-1.5 rounded-full bg-[#FBBC04]" />
             </div>
             <div className="flex flex-col">
-              <span className="text-lg font-black tracking-tight text-gray-900 leading-none">
-                ULASKAMI
+              <span className="text-lg font-black tracking-tight text-gray-900 leading-none flex items-center gap-1">
+                <span>ULASKAMI</span>
+                <span className="flex items-center gap-0.5 ml-0.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#4285F4]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#EA4335]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#FBBC05]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#34A853]" />
+                </span>
               </span>
-              <span className="text-[10px] text-green-700 font-medium tracking-wide uppercase mt-0.5">
-                NFC + QR Review Plate
+              <span className="text-[10px] text-blue-700 font-semibold tracking-wide uppercase mt-0.5">
+                NFC + QR Google Review Plate
               </span>
             </div>
           </Link>
@@ -62,25 +75,25 @@ export function Navbar() {
           <nav className="hidden md:flex items-center gap-8">
             <Link
               href="/#cara-kerja"
-              className="text-sm font-medium text-gray-600 hover:text-green-600 transition-colors"
+              className="text-sm font-medium text-gray-600 hover:text-[#1A73E8] transition-colors"
             >
               Cara Kerja
             </Link>
             <Link
               href="/#produk"
-              className="text-sm font-medium text-gray-600 hover:text-green-600 transition-colors"
+              className="text-sm font-medium text-gray-600 hover:text-[#1A73E8] transition-colors"
             >
               Produk
             </Link>
             <Link
               href="/#harga"
-              className="text-sm font-medium text-gray-600 hover:text-green-600 transition-colors"
+              className="text-sm font-medium text-gray-600 hover:text-[#1A73E8] transition-colors"
             >
               Harga
             </Link>
             <Link
               href="/#faq"
-              className="text-sm font-medium text-gray-600 hover:text-green-600 transition-colors"
+              className="text-sm font-medium text-gray-600 hover:text-[#1A73E8] transition-colors"
             >
               FAQ
             </Link>
@@ -91,27 +104,27 @@ export function Navbar() {
             {isLoggedIn ? (
               <Link
                 href="/dashboard"
-                className="text-xs font-semibold text-green-700 bg-green-50 hover:bg-green-100 border border-green-200 px-3 py-2 rounded-lg transition-colors"
+                className="text-xs font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-3 py-2 rounded-lg transition-colors"
               >
                 Dashboard Saya
               </Link>
             ) : (
               <Link
                 href="/login"
-                className="text-xs font-semibold text-gray-500 hover:text-green-700 px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors"
+                className="text-xs font-semibold text-gray-500 hover:text-blue-700 px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 Masuk
               </Link>
             )}
             <Link
               href="/activate"
-              className="text-sm font-semibold text-gray-700 hover:text-green-700 px-4 py-2 rounded-lg hover:bg-green-50/80 transition-colors"
+              className="text-sm font-semibold text-gray-700 hover:text-[#1A73E8] px-4 py-2 rounded-lg hover:bg-blue-50/80 transition-colors"
             >
               Aktivasi Plate
             </Link>
             <Link
               href="/#harga"
-              className="inline-flex items-center gap-1.5 text-sm font-semibold bg-green-600 hover:bg-green-700 text-white px-4 py-2.5 rounded-lg shadow-sm hover:shadow transition-all duration-200 active:scale-95"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold bg-[#1A73E8] hover:bg-[#1557B0] text-white px-4.5 py-2.5 rounded-xl shadow-md shadow-blue-600/20 hover:shadow-lg hover:shadow-blue-600/30 transition-all duration-200 active:scale-95"
             >
               <span>Beli Sekarang</span>
               <ArrowRight className="w-4 h-4" />
@@ -122,7 +135,7 @@ export function Navbar() {
           <div className="flex md:hidden items-center gap-2">
             <Link
               href="/activate"
-              className="text-xs font-semibold text-green-700 bg-green-50 px-3 py-1.5 rounded-md border border-green-200"
+              className="text-xs font-semibold text-blue-700 bg-blue-50 px-3 py-1.5 rounded-md border border-blue-200"
             >
               Aktivasi
             </Link>
@@ -142,28 +155,28 @@ export function Navbar() {
             <Link
               href="/#cara-kerja"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:bg-green-50 hover:text-green-700"
+              className="px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-700"
             >
               Cara Kerja
             </Link>
             <Link
               href="/#produk"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:bg-green-50 hover:text-green-700"
+              className="px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-700"
             >
               Detail Produk
             </Link>
             <Link
               href="/#harga"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:bg-green-50 hover:text-green-700"
+              className="px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-700"
             >
               Harga Plate
             </Link>
             <Link
               href="/#faq"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:bg-green-50 hover:text-green-700"
+              className="px-3 py-2 rounded-lg text-base font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-700"
             >
               FAQ
             </Link>
@@ -179,14 +192,14 @@ export function Navbar() {
               <Link
                 href="/activate"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full text-center py-2.5 px-4 rounded-lg font-semibold text-sm text-green-700 bg-green-50 hover:bg-green-100 border border-green-200"
+                className="w-full text-center py-2.5 px-4 rounded-lg font-semibold text-sm text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200"
               >
                 Aktivasi Plate Saya
               </Link>
               <Link
                 href="/#harga"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full text-center py-2.5 px-4 rounded-lg font-semibold text-sm text-white bg-green-600 hover:bg-green-700 shadow-sm"
+                className="w-full text-center py-2.5 px-4 rounded-lg font-semibold text-sm text-white bg-[#1A73E8] hover:bg-[#1557B0] shadow-sm"
               >
                 Pesan Ulaskami Plate
               </Link>

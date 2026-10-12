@@ -157,8 +157,8 @@ export function ProductMockup({
         {/* Floating Tag 1: NFC & QR */}
         <div className="absolute -top-3 -left-3 sm:-left-5 z-30 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-full shadow-lg border border-gray-100 flex items-center gap-2 text-xs font-semibold text-gray-800">
           <span className="flex h-2 w-2 relative">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-600"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34A853] opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#34A853]"></span>
           </span>
           <span>Dual Tech: NFC + QR</span>
         </div>
@@ -741,10 +741,10 @@ export function ProductMockup({
         <div className="w-full mt-6 p-4 rounded-2xl bg-white border border-gray-200 shadow-xs flex flex-col gap-2">
           <label className="text-xs font-bold text-gray-700 flex items-center justify-between">
             <span className="flex items-center gap-1.5">
-              <Store className="w-3.5 h-3.5 text-green-600" />
+              <Store className="w-3.5 h-3.5 text-[#1A73E8]" />
               <span>Coba Ketik Nama Toko / Kafe Anda:</span>
             </span>
-            <span className="text-[10px] text-green-700 font-semibold bg-green-50 px-2 py-0.5 rounded-md">
+            <span className="text-[10px] text-[#1A73E8] font-semibold bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">
               Pratinjau Langsung
             </span>
           </label>
@@ -754,7 +754,7 @@ export function ProductMockup({
             onChange={(e) => setBusinessName(e.target.value)}
             placeholder="Contoh: Kopi Kenangan Senopati"
             maxLength={32}
-            className="w-full px-3.5 py-2 text-xs font-bold rounded-xl border border-gray-300 focus:outline-hidden focus:border-green-600 focus:ring-2 focus:ring-green-100 bg-gray-50/50"
+            className="w-full px-3.5 py-2 text-xs font-bold rounded-xl border border-gray-300 focus:outline-hidden focus:border-[#1A73E8] focus:ring-2 focus:ring-blue-100 bg-gray-50/50"
           />
           {/* Quick presets */}
           <div className="flex flex-wrap gap-1.5 pt-1">
@@ -764,7 +764,7 @@ export function ProductMockup({
                 key={sName}
                 type="button"
                 onClick={() => setBusinessName(sName)}
-                className="text-[10px] font-semibold text-gray-600 hover:text-green-700 bg-gray-100 hover:bg-green-50 px-2 py-0.5 rounded-md transition-colors cursor-pointer"
+                className="text-[10px] font-semibold text-gray-600 hover:text-[#1A73E8] bg-gray-100 hover:bg-blue-50 px-2 py-0.5 rounded-md transition-colors cursor-pointer"
               >
                 {sName}
               </button>
