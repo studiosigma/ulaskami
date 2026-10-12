@@ -520,12 +520,31 @@ export async function generatePlateSvg(options: GenerateArtworkOptions): Promise
     <path d="${qrPath}" fill="#000000" shape-rendering="crispEdges" />
   </g>
 
-  <!-- NFC Wave Badge di Bawah QR -->
-  <g transform="translate(${width / 2 - 40}, 312)">
-    <rect x="0" y="0" width="80" height="24" rx="12" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1" />
-    <text x="40" y="16" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="700" fill="#2563eb">
-      ((( NFC Tap )))
+  <!-- Aksi Ganda Bawah: Tap (NFC) | or | Scan (QR) persis seperti foto -->
+  <g transform="translate(${width / 2}, 318)">
+    <!-- Kolom Kiri: Tap -->
+    <g transform="translate(-50, 0)">
+      <rect x="-8" y="-12" width="16" height="24" rx="3.5" fill="none" stroke="#0f172a" stroke-width="1.8" />
+      <circle cx="0" cy="-8" r="0.8" fill="#0f172a" />
+      <path d="M -13 -6 A 8 8 0 0 0 -13 6" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-linecap="round" />
+      <text x="0" y="20" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="800" fill="#0f172a">
+        Tap
+      </text>
+    </g>
+
+    <!-- Pembatas 'or' -->
+    <text x="0" y="4" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8.5" font-weight="700" fill="#94a3b8">
+      or
     </text>
+
+    <!-- Kolom Kanan: Scan -->
+    <g transform="translate(50, 0)">
+      <rect x="-8" y="-12" width="16" height="24" rx="3.5" fill="none" stroke="#0f172a" stroke-width="1.8" />
+      <rect x="-4" y="-7" width="8" height="8" rx="1" fill="none" stroke="#2563eb" stroke-width="1.2" />
+      <text x="0" y="20" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="800" fill="#0f172a">
+        Scan
+      </text>
+    </g>
   </g>
 
   <!-- Nama Bisnis & Serial Teknis -->
