@@ -20,6 +20,7 @@ import {
   ShieldCheck,
   Printer,
   Box,
+  Layers,
 } from "lucide-react";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
@@ -222,6 +223,14 @@ export default function DashboardPage() {
                 <Box className="w-4 h-4 text-green-600" />
                 <span className="hidden sm:inline">Batch Generator</span>
               </button>
+              <Link
+                href="/admin"
+                className="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-xl text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-colors shadow-2xs"
+                title="Buka konsol Super Admin & Audit Inventaris Global"
+              >
+                <Layers className="w-4 h-4 text-[#1A73E8]" />
+                <span className="hidden sm:inline">Super Admin</span>
+              </Link>
               <Link
                 href="/activate"
                 className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white text-sm font-bold px-4 py-2.5 rounded-xl shadow-sm transition-all"

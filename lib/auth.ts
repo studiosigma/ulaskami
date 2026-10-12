@@ -133,3 +133,21 @@ export async function clearSessionCookie(): Promise<void> {
   const cookieStore = await cookies();
   cookieStore.delete(COOKIE_NAME);
 }
+
+/**
+ * Memeriksa apakah user memiliki hak akses Super Admin / Administrator
+ */
+export function isUserAdmin(email?: string | null): boolean {
+  if (!email) return false;
+  const cleanEmail = email.toLowerCase().trim();
+  const adminEmails = (process.env.ADMIN_EMAILS || "")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+
+  if (adminEmails.length > 0) {
+    return adminEmails.includes(cleanEmail);
+  }
+  // Default fallback untuk akun demo / developer
+  return cleanEmail === "budi@kopikenangan.id" || process.env.NODE_ENV !== "production";
+}
