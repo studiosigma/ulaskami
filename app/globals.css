@@ -1,26 +1,52 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --brand-primary: #16a34a;
+    --brand-dark: #14532d;
+    --brand-light: #f0fdf4;
+    --brand-text: #111827;
+    --brand-muted: #6b7280;
+    --brand-border: #e5e7eb;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    color: #111827;
+    background-color: #ffffff;
+  }
+
+  body {
+    background-color: #ffffff;
+    color: #111827;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Acrylic Glass Effect */
+.acrylic-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 20px 40px -15px rgba(20, 83, 45, 0.12),
+              0 0 0 1px rgba(22, 163, 74, 0.08),
+              inset 0 1px 1px 0 rgba(255, 255, 255, 0.9);
 }
+
+.acrylic-card-dark {
+  background: rgba(17, 24, 39, 0.94);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35),
+              0 0 0 1px rgba(255, 255, 255, 0.08),
+              inset 0 1px 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.glass-badge {
+  background: rgba(240, 253, 244, 0.9);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(187, 247, 208, 0.8);
+}
+
