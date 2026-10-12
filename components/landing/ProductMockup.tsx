@@ -53,14 +53,16 @@ export function ProductMockup({
                 <span className="w-2 h-2 rounded-full bg-[#FBBC04]" />
               </div>
               <span className="leading-tight">Google 4-Color</span>
-              <span className="text-[9px] font-normal text-gray-400">Paling Populer</span>
+              <span className="text-[9px] font-semibold text-green-700 bg-green-50 px-1.5 py-0.2 rounded-md mt-0.5">
+                Ready Stock
+              </span>
             </button>
 
             {/* Tema B: Dark Luxury */}
             <button
               type="button"
               onClick={() => setSelectedTheme("dark_luxury")}
-              className={`flex flex-col items-center justify-center py-2 px-2 rounded-xl text-[11px] font-bold transition-all cursor-pointer ${
+              className={`relative flex flex-col items-center justify-center py-2 px-2 rounded-xl text-[11px] font-bold transition-all cursor-pointer ${
                 selectedTheme === "dark_luxury"
                   ? "bg-gray-900 text-white shadow-sm border border-gray-800"
                   : "text-gray-500 hover:text-gray-800"
@@ -72,8 +74,8 @@ export function ProductMockup({
                 <span className="w-2 h-2 rounded-full bg-zinc-400" />
               </div>
               <span className="leading-tight">Dark Luxury</span>
-              <span className={`text-[9px] font-normal ${selectedTheme === "dark_luxury" ? "text-zinc-400" : "text-gray-400"}`}>
-                Matte Black
+              <span className="text-[9px] font-bold text-amber-500 bg-amber-950/60 border border-amber-500/30 px-1.5 py-0.2 rounded-md mt-0.5">
+                Coming Soon
               </span>
             </button>
 
@@ -81,7 +83,7 @@ export function ProductMockup({
             <button
               type="button"
               onClick={() => setSelectedTheme("frost_gold")}
-              className={`flex flex-col items-center justify-center py-2 px-2 rounded-xl text-[11px] font-bold transition-all cursor-pointer ${
+              className={`relative flex flex-col items-center justify-center py-2 px-2 rounded-xl text-[11px] font-bold transition-all cursor-pointer ${
                 selectedTheme === "frost_gold"
                   ? "bg-gradient-to-b from-amber-50 to-white text-amber-950 shadow-sm border border-amber-200"
                   : "text-gray-500 hover:text-gray-800"
@@ -93,7 +95,9 @@ export function ProductMockup({
                 <span className="w-2 h-2 rounded-full bg-white border border-amber-300" />
               </div>
               <span className="leading-tight">Frost & Gold</span>
-              <span className="text-[9px] font-normal text-amber-700/70">Klinik & Salon</span>
+              <span className="text-[9px] font-bold text-amber-700 bg-amber-100/80 border border-amber-300/50 px-1.5 py-0.2 rounded-md mt-0.5">
+                Coming Soon
+              </span>
             </button>
           </div>
         </div>
@@ -152,6 +156,14 @@ export function ProductMockup({
           </span>
           <span>Dual Tech: NFC + QR</span>
         </div>
+
+        {/* Floating Tag Coming Soon jika Tema B atau C Dipilih */}
+        {selectedTheme !== "google_signature" && (
+          <div className="absolute -top-3 right-0 sm:-right-4 z-20 bg-amber-500 text-slate-950 font-black text-[10.5px] tracking-wide px-3 py-1.5 rounded-full shadow-xl border border-amber-300 flex items-center gap-1.5 uppercase animate-in fade-in zoom-in-95 duration-200">
+            <span className="w-2 h-2 rounded-full bg-slate-950 animate-pulse" />
+            <span>Segera Hadir / Pre-Order</span>
+          </div>
+        )}
 
         {/* Floating Tag 2: Beli Sekali */}
         <div className="absolute -bottom-2 -right-3 sm:-right-5 z-20 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-full shadow-lg border border-gray-100 flex items-center gap-2 text-xs font-semibold text-gray-800">

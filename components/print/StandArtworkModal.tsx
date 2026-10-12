@@ -194,8 +194,11 @@ export default function StandArtworkModal({ plate, isOpen, onClose }: StandArtwo
                     {style === "dark_luxury" && <Check className="w-3 h-3" />}
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-slate-900">
-                      Tema B: Dark Luxury / Matte Black
+                    <p className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                      <span>Tema B: Dark Luxury / Matte Black</span>
+                      <span className="text-[9.5px] font-bold text-amber-700 bg-amber-50 px-1.5 py-0.2 rounded border border-amber-200">
+                        Coming Soon
+                      </span>
                     </p>
                     <p className="text-[11px] text-slate-500 mt-0.5">
                       Akrilik hitam doff obsidian. Ideal untuk barbershop, steakhouse & cafe industrial.
@@ -216,8 +219,11 @@ export default function StandArtworkModal({ plate, isOpen, onClose }: StandArtwo
                     {style === "frost_gold" && <Check className="w-3 h-3" />}
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-slate-900">
-                      Tema C: Frost White & Gold Accent
+                    <p className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                      <span>Tema C: Frost White & Gold Accent</span>
+                      <span className="text-[9.5px] font-bold text-amber-700 bg-amber-50 px-1.5 py-0.2 rounded border border-amber-200">
+                        Coming Soon
+                      </span>
                     </p>
                     <p className="text-[11px] text-slate-500 mt-0.5">
                       Semi-transparan elegan & 5 bintang emas. Khusus klinik estetika, dental & spa.

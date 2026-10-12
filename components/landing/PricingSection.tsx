@@ -17,7 +17,8 @@ export function PricingSection() {
       description: "Ideal untuk 1 meja kasir, reception desk, atau area kasir utama bisnis Anda.",
       features: [
         "1x Ulaskami NFC + QR Acrylic Plate",
-        "Pilihan tema: Google 4-Color, Matte Black, atau Frost Gold",
+        "Tema Utama: Google 4-Color (Signature Ready Stock)",
+        "Matte Black & Frost Gold (Pre-Order / Coming Soon)",
         "Dudukan akrilik elegan (Stand included)",
         "NFC Chip respons instan",
         "Custom laser QR code resolusi tinggi",
@@ -41,7 +42,8 @@ export function PricingSection() {
       description: "Pilihan terbaik untuk kafe, resto, atau klinik dengan beberapa meja & kasir.",
       features: [
         "3x Ulaskami NFC + QR Acrylic Plate",
-        "Bebas mix tema per plate (Google/Black/Gold)",
+        "Desain Google 4-Color Signature (Ready Stock)",
+        "Bebas PO Matte Black & Frost Gold (Coming Soon)",
         "3x Dudukan akrilik solid",
         "NFC Chip respons instan di tiap plate",
         "QR code unik per plate / batch",
@@ -195,17 +197,26 @@ export function PricingSection() {
         <div className="mt-12 max-w-2xl mx-auto text-center bg-gray-50 border border-gray-200/90 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-center gap-3">
           <div className="flex items-center gap-1.5 text-xs font-bold text-gray-800">
             <Palette className="w-4 h-4 text-blue-600" />
-            <span>Pilihan Tema Tanpa Biaya Tambahan:</span>
+            <span>Pilihan Tema Desain:</span>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-gray-700">
-            <span className="bg-white px-2.5 py-1 rounded-lg border border-gray-200 shadow-2xs font-semibold">
-              🎨 Google 4-Color
+            <span className="bg-white px-2.5 py-1 rounded-lg border border-gray-200 shadow-2xs font-semibold flex items-center gap-1.5 text-gray-900">
+              <span>🎨 Google 4-Color</span>
+              <span className="text-[10px] text-green-700 bg-green-50 font-bold px-1.5 py-0.2 rounded">
+                Ready Stock
+              </span>
             </span>
-            <span className="bg-white px-2.5 py-1 rounded-lg border border-gray-200 shadow-2xs font-semibold">
-              🖤 Dark Luxury Matte
+            <span className="bg-white px-2.5 py-1 rounded-lg border border-gray-200 shadow-2xs font-semibold flex items-center gap-1.5 text-gray-600">
+              <span>🖤 Dark Luxury Matte</span>
+              <span className="text-[10px] text-amber-700 bg-amber-50 font-bold px-1.5 py-0.2 rounded">
+                Coming Soon
+              </span>
             </span>
-            <span className="bg-white px-2.5 py-1 rounded-lg border border-gray-200 shadow-2xs font-semibold">
-              ⭐ Frost White &amp; Gold
+            <span className="bg-white px-2.5 py-1 rounded-lg border border-gray-200 shadow-2xs font-semibold flex items-center gap-1.5 text-gray-600">
+              <span>⭐ Frost White &amp; Gold</span>
+              <span className="text-[10px] text-amber-700 bg-amber-50 font-bold px-1.5 py-0.2 rounded">
+                Coming Soon
+              </span>
             </span>
           </div>
         </div>
