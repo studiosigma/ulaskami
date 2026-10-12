@@ -162,7 +162,7 @@ export default function StandArtworkModal({ plate, isOpen, onClose }: StandArtwo
                 <button
                   type="button"
                   onClick={() => setStyle("google_color_badge")}
-                  className={`w-full p-3 rounded-xl border text-left cursor-pointer transition-all flex items-start gap-2.5 ${
+                  className={`w-full p-2.5 rounded-xl border text-left cursor-pointer transition-all flex items-start gap-2.5 ${
                     style === "google_color_badge"
                       ? "bg-indigo-50/70 border-indigo-300 ring-2 ring-indigo-400/40"
                       : "bg-white border-slate-200 hover:bg-slate-50"
@@ -173,10 +173,54 @@ export default function StandArtworkModal({ plate, isOpen, onClose }: StandArtwo
                   </div>
                   <div>
                     <p className="text-xs font-bold text-slate-900">
-                      Opsi 2: Badge 4-Warna Google
+                      Tema A: Google 4-Color Signature
                     </p>
                     <p className="text-[11px] text-slate-500 mt-0.5">
-                      Sangat cocok ditempel di etalase kaca display atau meja kasir.
+                      4 sudut warna Google cerah. Paling menarik perhatian di kasir F&B & ritel.
+                    </p>
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setStyle("dark_luxury")}
+                  className={`w-full p-2.5 rounded-xl border text-left cursor-pointer transition-all flex items-start gap-2.5 ${
+                    style === "dark_luxury"
+                      ? "bg-indigo-50/70 border-indigo-300 ring-2 ring-indigo-400/40"
+                      : "bg-white border-slate-200 hover:bg-slate-50"
+                  }`}
+                >
+                  <div className="w-4 h-4 rounded-full mt-0.5 border flex items-center justify-center border-indigo-600 bg-indigo-600 text-white shrink-0">
+                    {style === "dark_luxury" && <Check className="w-3 h-3" />}
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-slate-900">
+                      Tema B: Dark Luxury / Matte Black
+                    </p>
+                    <p className="text-[11px] text-slate-500 mt-0.5">
+                      Akrilik hitam doff obsidian. Ideal untuk barbershop, steakhouse & cafe industrial.
+                    </p>
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setStyle("frost_gold")}
+                  className={`w-full p-2.5 rounded-xl border text-left cursor-pointer transition-all flex items-start gap-2.5 ${
+                    style === "frost_gold"
+                      ? "bg-indigo-50/70 border-indigo-300 ring-2 ring-indigo-400/40"
+                      : "bg-white border-slate-200 hover:bg-slate-50"
+                  }`}
+                >
+                  <div className="w-4 h-4 rounded-full mt-0.5 border flex items-center justify-center border-indigo-600 bg-indigo-600 text-white shrink-0">
+                    {style === "frost_gold" && <Check className="w-3 h-3" />}
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-slate-900">
+                      Tema C: Frost White & Gold Accent
+                    </p>
+                    <p className="text-[11px] text-slate-500 mt-0.5">
+                      Semi-transparan elegan & 5 bintang emas. Khusus klinik estetika, dental & spa.
                     </p>
                   </div>
                 </button>
@@ -184,7 +228,7 @@ export default function StandArtworkModal({ plate, isOpen, onClose }: StandArtwo
                 <button
                   type="button"
                   onClick={() => setStyle("minimal_clear")}
-                  className={`w-full p-3 rounded-xl border text-left cursor-pointer transition-all flex items-start gap-2.5 ${
+                  className={`w-full p-2.5 rounded-xl border text-left cursor-pointer transition-all flex items-start gap-2.5 ${
                     style === "minimal_clear"
                       ? "bg-indigo-50/70 border-indigo-300 ring-2 ring-indigo-400/40"
                       : "bg-white border-slate-200 hover:bg-slate-50"
@@ -195,10 +239,10 @@ export default function StandArtworkModal({ plate, isOpen, onClose }: StandArtwo
                   </div>
                   <div>
                     <p className="text-xs font-bold text-slate-900">
-                      Opsi 1: Stand Meja Minimalis Bening
+                      Stand Meja Minimalis Bening
                     </p>
                     <p className="text-[11px] text-slate-500 mt-0.5">
-                      Cocok diletakkan di meja kafe/restoran dengan balok dudukan kayu.
+                      Model portrait bersih untuk dudukan balok kayu meja kafe.
                     </p>
                   </div>
                 </button>

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Check, Sparkles, ArrowRight, ShieldCheck } from "lucide-react";
+import { Check, Sparkles, ArrowRight, ShieldCheck, Palette } from "lucide-react";
 import { SITE_CONFIG } from "@/lib/config";
 
 export function PricingSection() {
@@ -17,6 +17,7 @@ export function PricingSection() {
       description: "Ideal untuk 1 meja kasir, reception desk, atau area kasir utama bisnis Anda.",
       features: [
         "1x Ulaskami NFC + QR Acrylic Plate",
+        "Pilihan tema: Google 4-Color, Matte Black, atau Frost Gold",
         "Dudukan akrilik elegan (Stand included)",
         "NFC Chip respons instan",
         "Custom laser QR code resolusi tinggi",
@@ -40,6 +41,7 @@ export function PricingSection() {
       description: "Pilihan terbaik untuk kafe, resto, atau klinik dengan beberapa meja & kasir.",
       features: [
         "3x Ulaskami NFC + QR Acrylic Plate",
+        "Bebas mix tema per plate (Google/Black/Gold)",
         "3x Dudukan akrilik solid",
         "NFC Chip respons instan di tiap plate",
         "QR code unik per plate / batch",
@@ -189,10 +191,29 @@ export function PricingSection() {
           ))}
         </div>
 
+        {/* 3 Themes Banner */}
+        <div className="mt-12 max-w-2xl mx-auto text-center bg-gray-50 border border-gray-200/90 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <div className="flex items-center gap-1.5 text-xs font-bold text-gray-800">
+            <Palette className="w-4 h-4 text-blue-600" />
+            <span>Pilihan Tema Tanpa Biaya Tambahan:</span>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-gray-700">
+            <span className="bg-white px-2.5 py-1 rounded-lg border border-gray-200 shadow-2xs font-semibold">
+              🎨 Google 4-Color
+            </span>
+            <span className="bg-white px-2.5 py-1 rounded-lg border border-gray-200 shadow-2xs font-semibold">
+              🖤 Dark Luxury Matte
+            </span>
+            <span className="bg-white px-2.5 py-1 rounded-lg border border-gray-200 shadow-2xs font-semibold">
+              ⭐ Frost White &amp; Gold
+            </span>
+          </div>
+        </div>
+
         {/* Bottom guarantee strip */}
-        <div className="mt-12 text-center text-xs text-gray-500 max-w-xl mx-auto flex items-center justify-center gap-2">
+        <div className="mt-6 text-center text-xs text-gray-500 max-w-xl mx-auto flex items-center justify-center gap-2">
           <ShieldCheck className="w-4 h-4 text-green-600 shrink-0" />
-          <span>Pengiriman ke seluruh Indonesia via JNE, J&T, SiCepat & Anteraja.</span>
+          <span>Pengiriman ke seluruh Indonesia via JNE, J&T, SiCepat &amp; Anteraja.</span>
         </div>
       </div>
     </section>

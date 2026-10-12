@@ -46,6 +46,28 @@ async function runTests() {
   assert(clearStandSvg.includes("#FBBC05"), "Clear Stand SVG contains 5 gold stars");
   assert(clearStandSvg.includes('Powered by <tspan fill="#2563eb" font-weight="700">ulaskami.id</tspan>'), "Clear Stand SVG also includes 'ulaskami.id' in hyperlink blue (#2563eb)");
 
+  // Test Tema B: Dark Luxury / Matte Black
+  const darkLuxurySvg = await generatePlateSvg({
+    code: "ULK-000001",
+    businessName: "Barbershop Barokah",
+    style: "dark_luxury",
+    format: "square_100",
+  });
+  assert(darkLuxurySvg.includes("#0f1117") && darkLuxurySvg.includes("#181a22"), "Dark Luxury SVG includes obsidian dark palette");
+  assert(darkLuxurySvg.includes("Barbershop Barokah"), "Dark Luxury SVG includes business name");
+  assert(darkLuxurySvg.includes('Powered by <tspan fill="#38bdf8" font-weight="700">ulaskami.id</tspan>'), "Dark Luxury SVG includes neon cyan ulaskami.id link");
+
+  // Test Tema C: Frost White & Gold Accent
+  const frostGoldSvg = await generatePlateSvg({
+    code: "ULK-000001",
+    businessName: "Klinik Medika Estetika",
+    style: "frost_gold",
+    format: "square_100",
+  });
+  assert(frostGoldSvg.includes("#faf8f5") && frostGoldSvg.includes("#d4af37"), "Frost Gold SVG includes pearlescent & gold accents");
+  assert(frostGoldSvg.includes("Klinik Medika Estetika"), "Frost Gold SVG includes clinic business name");
+  assert(frostGoldSvg.includes('Powered by <tspan fill="#d97706" font-weight="700">ulaskami.id</tspan>'), "Frost Gold SVG includes amber gold ulaskami.id link");
+
   // Test XML Escaping for Ampersand & XSS tags
   const escapedSvg = await generatePlateSvg({
     code: "ULK-000001",

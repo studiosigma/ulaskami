@@ -1,6 +1,10 @@
 import QRCode from "qrcode";
 
-export type ArtworkStyle = "google_color_badge" | "minimal_clear";
+export type ArtworkStyle =
+  | "google_color_badge"
+  | "dark_luxury"
+  | "frost_gold"
+  | "minimal_clear";
 export type ArtworkFormat = "square_100" | "square_120" | "tent_a6";
 
 export interface GenerateArtworkOptions {
@@ -228,6 +232,243 @@ export async function generatePlateSvg(options: GenerateArtworkOptions): Promise
     <!-- Powered by ulaskami.id (ulaskami.id berwarna biru hyperlink) -->
     <text x="0" y="6" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9.5" fill="#64748b">
       Powered by <tspan fill="#2563eb" font-weight="700">ulaskami.id</tspan>
+    </text>
+  </g>
+
+  ${cropMarks}
+</svg>`;
+  }
+
+  // -------------------------------------------------------------
+  // TEMA B: DARK LUXURY / MATTE BLACK (Barbershop, Lounge, Cafe)
+  // -------------------------------------------------------------
+  if (style === "dark_luxury") {
+    const cardMarginX = 24;
+    const cardMarginY = 32;
+    const cardWidth = width - cardMarginX * 2;
+    const cardHeight = height - cardMarginY * 2;
+
+    const qrPixelTarget = 95;
+    const qrScale = qrPixelTarget / qrSize;
+
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}">
+  <defs>
+    <clipPath id="outer-plate-clip">
+      <rect x="0" y="0" width="${width}" height="${height}" rx="32" ry="32" />
+    </clipPath>
+    <filter id="card-shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.4" />
+    </filter>
+  </defs>
+
+  <!-- Latar Belakang Matte Black Akrilik -->
+  <g clip-path="url(#outer-plate-clip)">
+    <rect x="0" y="0" width="${width}" height="${height}" fill="#0f1117" />
+    <rect x="2" y="2" width="${width - 4}" height="${height - 4}" rx="30" ry="30" fill="none" stroke="#2a2e39" stroke-width="2" />
+  </g>
+
+  <!-- Kartu Tengah Obsidian Doff -->
+  <rect x="${cardMarginX}" y="${cardMarginY}" width="${cardWidth}" height="${cardHeight}" rx="22" ry="22" fill="#181a22" stroke="#252936" stroke-width="1.5" filter="url(#card-shadow)" />
+
+  <!-- Tab Bulat Logo Google di Atas Kartu -->
+  <circle cx="${width / 2}" cy="${cardMarginY + 12}" r="32" fill="#1e222d" stroke="#2a2f3d" stroke-width="1.5" />
+
+  <!-- Logo Google G Resmi -->
+  <g transform="translate(${width / 2 - 20}, ${cardMarginY - 8})">
+    ${googleLogoSvg}
+  </g>
+
+  <!-- Headline: review us on Google -->
+  <text x="${width / 2}" y="${cardMarginY + 68}" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" fill="#94a3b8" letter-spacing="0.4">
+    ulas kami di
+  </text>
+  <text x="${width / 2}" y="${cardMarginY + 92}" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="800" fill="#ffffff" letter-spacing="-0.5">
+    Google
+  </text>
+
+  <!-- Garis Pembagi Vertikal -->
+  <line x1="${width / 2}" y1="${cardMarginY + 115}" x2="${width / 2}" y2="${cardMarginY + 235}" stroke="#2a2f3d" stroke-width="1.5" stroke-linecap="round" />
+
+  <!-- Badge 'ATAU' di Tengah -->
+  <rect x="${width / 2 - 14}" y="${cardMarginY + 165}" width="28" height="16" rx="4" fill="#1e222d" stroke="#2a2f3d" stroke-width="1" />
+  <text x="${width / 2}" y="${cardMarginY + 177}" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="800" fill="#94a3b8">
+    ATAU
+  </text>
+
+  <!-- Kolom Kiri: TAP HP ANDA (NFC Glowing Cyan Accent) -->
+  <g transform="translate(${width / 4 + 8}, ${cardMarginY + 115})">
+    <text x="0" y="5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9.5" font-weight="800" fill="#e2e8f0" letter-spacing="0.5">
+      TAP HP ANDA
+    </text>
+
+    <!-- Ikon Smartphone + NFC Wave -->
+    <g transform="translate(-18, 16)">
+      <rect x="0" y="0" width="36" height="62" rx="7" fill="#13151b" stroke="#38bdf8" stroke-width="2.2" />
+      <circle cx="18" cy="8" r="1.5" fill="#38bdf8" />
+      <rect x="10" y="52" width="16" height="2" rx="1" fill="#38bdf8" />
+      <text x="18" y="36" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9.5" font-weight="900" fill="#38bdf8" letter-spacing="0.5">
+        NFC
+      </text>
+
+      <path d="M -8 24 A 14 14 0 0 0 -8 40" fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" />
+      <path d="M -14 18 A 22 22 0 0 0 -14 46" fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" />
+      <path d="M 44 24 A 14 14 0 0 1 44 40" fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" />
+      <path d="M 50 18 A 22 22 0 0 1 50 46" fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" />
+    </g>
+
+    <text x="0" y="100" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8.5" font-weight="600" fill="#94a3b8">
+      Tempelkan ke sini
+    </text>
+  </g>
+
+  <!-- Kolom Kanan: SCAN QR -->
+  <g transform="translate(${width * 0.75 - 8}, ${cardMarginY + 115})">
+    <text x="0" y="5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9.5" font-weight="800" fill="#e2e8f0" letter-spacing="0.5">
+      SCAN QR
+    </text>
+
+    <!-- Latar Putih High Contrast untuk Kecepatan Kamera 100% -->
+    <rect x="${-qrPixelTarget / 2 - 4}" y="12" width="${qrPixelTarget + 8}" height="${qrPixelTarget + 8}" rx="8" fill="#ffffff" />
+    <g transform="translate(${-qrPixelTarget / 2}, 16) scale(${qrScale})">
+      <path d="${qrPath}" fill="#000000" shape-rendering="crispEdges" />
+    </g>
+
+    <text x="0" y="125" text-anchor="middle" font-family="monospace" font-size="9" font-weight="700" fill="#94a3b8">
+      ${cleanCode}
+    </text>
+  </g>
+
+  <!-- Footer Bagian Bawah Kartu -->
+  <g transform="translate(${width / 2}, ${cardMarginY + cardHeight - 24})">
+    <text x="0" y="-14" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11.5" font-weight="700" fill="#ffffff">
+      ${cleanBusinessName}
+    </text>
+    <text x="0" y="6" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9.5" fill="#94a3b8">
+      Powered by <tspan fill="#38bdf8" font-weight="700">ulaskami.id</tspan>
+    </text>
+  </g>
+
+  ${cropMarks}
+</svg>`;
+  }
+
+  // -------------------------------------------------------------
+  // TEMA C: FROST WHITE & GOLD ACCENT (Klinik Estetika, Salon, Spa)
+  // -------------------------------------------------------------
+  if (style === "frost_gold") {
+    const cardMarginX = 24;
+    const cardMarginY = 32;
+    const cardWidth = width - cardMarginX * 2;
+    const cardHeight = height - cardMarginY * 2;
+
+    const qrPixelTarget = 95;
+    const qrScale = qrPixelTarget / qrSize;
+
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}">
+  <defs>
+    <clipPath id="outer-plate-clip">
+      <rect x="0" y="0" width="${width}" height="${height}" rx="32" ry="32" />
+    </clipPath>
+    <filter id="card-shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#78350f" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Latar Belakang Frosted Pearlescent Ivory dengan Trim Emas -->
+  <g clip-path="url(#outer-plate-clip)">
+    <rect x="0" y="0" width="${width}" height="${height}" fill="#faf8f5" />
+    <rect x="2" y="2" width="${width - 4}" height="${height - 4}" rx="30" ry="30" fill="none" stroke="#e5c97b" stroke-width="2.5" />
+  </g>
+
+  <!-- Kartu Tengah Putih Mutiara -->
+  <rect x="${cardMarginX}" y="${cardMarginY}" width="${cardWidth}" height="${cardHeight}" rx="22" ry="22" fill="#ffffff" stroke="#f2e6cf" stroke-width="1.5" filter="url(#card-shadow)" />
+
+  <!-- Tab Bulat Logo Google di Atas Kartu dengan Gold Ring -->
+  <circle cx="${width / 2}" cy="${cardMarginY + 12}" r="32" fill="#fffdf9" stroke="#d4af37" stroke-width="1.8" />
+
+  <!-- Logo Google G Resmi -->
+  <g transform="translate(${width / 2 - 20}, ${cardMarginY - 8})">
+    ${googleLogoSvg}
+  </g>
+
+  <!-- 5 Bintang Emas Berkilau -->
+  <g transform="translate(${width / 2 - 38}, ${cardMarginY + 52})" fill="#f59e0b">
+    <polygon points="6,0 7.5,4.5 12,4.5 8.5,7.5 10,12 6,9 2,12 3.5,7.5 0,4.5 4.5,4.5" />
+    <polygon points="22,0 23.5,4.5 28,4.5 24.5,7.5 26,12 22,9 18,12 19.5,7.5 16,4.5 20.5,4.5" />
+    <polygon points="38,0 39.5,4.5 44,4.5 40.5,7.5 42,12 38,9 34,12 35.5,7.5 32,4.5 36.5,4.5" />
+    <polygon points="54,0 55.5,4.5 60,4.5 56.5,7.5 58,12 54,9 50,12 51.5,7.5 48,4.5 52.5,4.5" />
+    <polygon points="70,0 71.5,4.5 76,4.5 72.5,7.5 74,12 70,9 66,12 67.5,7.5 64,4.5 68.5,4.5" />
+  </g>
+
+  <!-- Headline: review us on Google -->
+  <text x="${width / 2}" y="${cardMarginY + 74}" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" fill="#78716c" letter-spacing="0.4">
+    ulas kami di
+  </text>
+  <text x="${width / 2}" y="${cardMarginY + 94}" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="800" fill="#1c1917" letter-spacing="-0.5">
+    Google
+  </text>
+
+  <!-- Garis Pembagi Vertikal -->
+  <line x1="${width / 2}" y1="${cardMarginY + 115}" x2="${width / 2}" y2="${cardMarginY + 235}" stroke="#f0e6d6" stroke-width="1.5" stroke-linecap="round" />
+
+  <!-- Badge 'ATAU' di Tengah -->
+  <rect x="${width / 2 - 14}" y="${cardMarginY + 165}" width="28" height="16" rx="4" fill="#fffdf9" stroke="#e7dcce" stroke-width="1" />
+  <text x="${width / 2}" y="${cardMarginY + 177}" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" font-weight="800" fill="#a8a29e">
+    ATAU
+  </text>
+
+  <!-- Kolom Kiri: TAP HP ANDA (NFC Emas) -->
+  <g transform="translate(${width / 4 + 8}, ${cardMarginY + 115})">
+    <text x="0" y="5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9.5" font-weight="800" fill="#292524" letter-spacing="0.5">
+      TAP HP ANDA
+    </text>
+
+    <!-- Ikon Smartphone + NFC Wave Emas -->
+    <g transform="translate(-18, 16)">
+      <rect x="0" y="0" width="36" height="62" rx="7" fill="none" stroke="#d97706" stroke-width="2.2" />
+      <circle cx="18" cy="8" r="1.5" fill="#d97706" />
+      <rect x="10" y="52" width="16" height="2" rx="1" fill="#d97706" />
+      <text x="18" y="36" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9.5" font-weight="900" fill="#d97706" letter-spacing="0.5">
+        NFC
+      </text>
+
+      <path d="M -8 24 A 14 14 0 0 0 -8 40" fill="none" stroke="#d97706" stroke-width="2.2" stroke-linecap="round" />
+      <path d="M -14 18 A 22 22 0 0 0 -14 46" fill="none" stroke="#d97706" stroke-width="2.2" stroke-linecap="round" />
+      <path d="M 44 24 A 14 14 0 0 1 44 40" fill="none" stroke="#d97706" stroke-width="2.2" stroke-linecap="round" />
+      <path d="M 50 18 A 22 22 0 0 1 50 46" fill="none" stroke="#d97706" stroke-width="2.2" stroke-linecap="round" />
+    </g>
+
+    <text x="0" y="100" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8.5" font-weight="600" fill="#78716c">
+      Tempelkan ke sini
+    </text>
+  </g>
+
+  <!-- Kolom Kanan: SCAN QR -->
+  <g transform="translate(${width * 0.75 - 8}, ${cardMarginY + 115})">
+    <text x="0" y="5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9.5" font-weight="800" fill="#292524" letter-spacing="0.5">
+      SCAN QR
+    </text>
+
+    <!-- Kartu QR dengan Trim Gold Lembut -->
+    <rect x="${-qrPixelTarget / 2 - 4}" y="12" width="${qrPixelTarget + 8}" height="${qrPixelTarget + 8}" rx="8" fill="#ffffff" stroke="#f0e6d6" stroke-width="1" />
+    <g transform="translate(${-qrPixelTarget / 2}, 16) scale(${qrScale})">
+      <path d="${qrPath}" fill="#000000" shape-rendering="crispEdges" />
+    </g>
+
+    <text x="0" y="125" text-anchor="middle" font-family="monospace" font-size="9" font-weight="700" fill="#a8a29e">
+      ${cleanCode}
+    </text>
+  </g>
+
+  <!-- Footer Bagian Bawah Kartu -->
+  <g transform="translate(${width / 2}, ${cardMarginY + cardHeight - 24})">
+    <text x="0" y="-14" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11.5" font-weight="700" fill="#1c1917">
+      ${cleanBusinessName}
+    </text>
+    <text x="0" y="6" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9.5" fill="#78716c">
+      Powered by <tspan fill="#d97706" font-weight="700">ulaskami.id</tspan>
     </text>
   </g>
 
