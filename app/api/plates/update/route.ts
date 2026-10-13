@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { code, googleReviewUrl, businessName, routingMode, feedbackWhatsapp, minGoogleRating } = body;
+    const { code, googleReviewUrl, businessName, routingMode, feedbackWhatsapp, webhookUrl, minGoogleRating } = body;
 
     if (!code || !googleReviewUrl) {
       return NextResponse.json(
@@ -57,12 +57,15 @@ export async function POST(request: NextRequest) {
       cleanWhatsapp = raw;
     }
 
+    const cleanWebhook = webhookUrl !== undefined ? String(webhookUrl).trim() : undefined;
+
     const updated = await updatePlateUrl({
       code: code.trim(),
       googleReviewUrl: urlValidation.normalizedUrl || googleReviewUrl.trim(),
       businessName: businessName ? businessName.trim() : undefined,
       routingMode: routingMode === "direct" ? "direct" : routingMode === "smart_filter" ? "smart_filter" : undefined,
       feedbackWhatsapp: cleanWhatsapp,
+      webhookUrl: cleanWebhook,
       minGoogleRating: minGoogleRating ? Number(minGoogleRating) : undefined,
     });
 

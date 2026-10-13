@@ -37,8 +37,12 @@ export default function ReviewGate({ plate }: ReviewGateProps) {
   const [rating, setRating] = useState<number | null>(null);
   const [hoverRating, setHoverRating] = useState<number | null>(null);
   const [privateFeedback, setPrivateFeedback] = useState("");
+  const [customerName, setCustomerName] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [serverWhatsappAlertUrl, setServerWhatsappAlertUrl] = useState<string | null>(null);
   const [isSubmittingFeedback, setIsSubmittingFeedback] = useState(false);
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
+  const [feedbackError, setFeedbackError] = useState<string | null>(null);
 
   const minGoogleRating = plate.minGoogleRating || 4;
   const isPositive = rating !== null && rating >= minGoogleRating;
@@ -46,21 +50,47 @@ export default function ReviewGate({ plate }: ReviewGateProps) {
 
   const activeStarCount = hoverRating || rating || 0;
 
-  // WhatsApp link untuk keluhan privat
+  // WhatsApp link fallback untuk keluhan privat
   const targetWhatsapp = plate.feedbackWhatsapp || SITE_CONFIG.whatsappNumber;
-  const whatsappComplaintMessage = `Halo pengelola ${plate.businessName}, saya pelanggan yang baru saja berkunjung (Rating ${rating}/5). Saya ingin menyampaikan masukan terkait layanan:`;
-  const whatsappUrl = SITE_CONFIG.createCustomWhatsAppLink(targetWhatsapp, whatsappComplaintMessage);
+  const whatsappComplaintMessage = `Halo pengelola ${plate.businessName}, saya pelanggan yang baru saja berkunjung (Rating ${rating}/5). Saya ingin menyampaikan masukan terkait layanan: "${privateFeedback.trim() || "..."}"`;
+  const defaultWhatsappUrl = SITE_CONFIG.createCustomWhatsAppLink(targetWhatsapp, whatsappComplaintMessage);
+  const effectiveWhatsappUrl = serverWhatsappAlertUrl || defaultWhatsappUrl;
 
-  const handleSubmitPrivateFeedback = (e: React.FormEvent) => {
+  const handleSubmitPrivateFeedback = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!privateFeedback.trim()) return;
 
     setIsSubmittingFeedback(true);
-    // Simulasikan pencatatan masukan internal
-    setTimeout(() => {
-      setIsSubmittingFeedback(false);
+    setFeedbackError(null);
+
+    try {
+      const res = await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          plateCode: plate.code,
+          rating: rating || 3,
+          feedbackText: privateFeedback.trim(),
+          customerName: customerName.trim() || undefined,
+          customerPhone: customerPhone.trim() || undefined,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Gagal mengirim masukan.");
+      }
+
+      if (data.whatsappAlertUrl) {
+        setServerWhatsappAlertUrl(data.whatsappAlertUrl);
+      }
       setFeedbackSubmitted(true);
-    }, 600);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Gagal mengirim masukan.";
+      setFeedbackError(message);
+    } finally {
+      setIsSubmittingFeedback(false);
+    }
   };
 
   return (
@@ -183,48 +213,114 @@ export default function ReviewGate({ plate }: ReviewGateProps) {
               Kami ingin selalu memperbaiki layanan. Masukan Anda akan langsung kami sampaikan ke pihak manajemen pengelola.
             </p>
 
-            {/* Tombol Pengaduan Langsung via WhatsApp */}
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-semibold text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition-all transform active:scale-98 text-sm mb-3"
-            >
-              <MessageSquare className="w-4 h-4" />
-              <span>Sampaikan via WhatsApp Pengelola</span>
-            </a>
-
-            {/* Form Masukan Internal Alternatif */}
+            {/* Form Masukan Internal */}
             {!feedbackSubmitted ? (
-              <form onSubmit={handleSubmitPrivateFeedback} className="mt-3 pt-3 border-t border-amber-100">
-                <label htmlFor="privateFeedback" className="block text-xs font-medium text-slate-700 mb-1.5">
-                  Atau tuliskan masukan langsung di sini:
-                </label>
-                <textarea
-                  id="privateFeedback"
-                  rows={2}
-                  value={privateFeedback}
-                  onChange={(e) => setPrivateFeedback(e.target.value)}
-                  placeholder="Misal: Rasa makanan, waktu tunggu pesanan, dll..."
-                  className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 bg-white"
-                />
+              <form onSubmit={handleSubmitPrivateFeedback} className="space-y-3">
+                <div>
+                  <label htmlFor="privateFeedback" className="block text-xs font-bold text-slate-700 mb-1">
+                    Masukan atau Kritik Anda: <span className="text-red-500">*</span>
+                  </label>
+                  <textarea
+                    id="privateFeedback"
+                    rows={3}
+                    required
+                    value={privateFeedback}
+                    onChange={(e) => setPrivateFeedback(e.target.value)}
+                    placeholder="Contoh: Waktu tunggu pesanan agak lama, rasa makanan kurang asin, pelayanan kasir, dll..."
+                    className="w-full px-3 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-blue-100 focus:border-[#1A73E8] bg-white transition-all"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <div>
+                    <label htmlFor="customerName" className="block text-[11px] font-semibold text-slate-600 mb-1">
+                      Nama Anda <span className="text-slate-400 font-normal">(Opsional)</span>
+                    </label>
+                    <input
+                      id="customerName"
+                      type="text"
+                      value={customerName}
+                      onChange={(e) => setCustomerName(e.target.value)}
+                      placeholder="Misal: Budi"
+                      className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-blue-100 focus:border-[#1A73E8] bg-white"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="customerPhone" className="block text-[11px] font-semibold text-slate-600 mb-1">
+                      No. WhatsApp Anda <span className="text-slate-400 font-normal">(Opsional)</span>
+                    </label>
+                    <input
+                      id="customerPhone"
+                      type="tel"
+                      value={customerPhone}
+                      onChange={(e) => setCustomerPhone(e.target.value)}
+                      placeholder="0812xxxxxxx"
+                      className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-hidden focus:ring-2 focus:ring-blue-100 focus:border-[#1A73E8] bg-white font-mono"
+                    />
+                  </div>
+                </div>
+
+                <p className="text-[10px] text-slate-400 leading-tight">
+                  Nomor HP hanya digunakan bila pengelola ingin menyampaikan permohonan maaf atau voucher kompensasi.
+                </p>
+
+                {feedbackError && (
+                  <div className="p-2.5 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700">
+                    {feedbackError}
+                  </div>
+                )}
+
                 <button
                   type="submit"
                   disabled={!privateFeedback.trim() || isSubmittingFeedback}
-                  className="mt-2 w-full py-2 px-3 rounded-lg text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 disabled:opacity-50 transition-colors"
+                  className="w-full py-3 px-4 rounded-xl font-bold text-xs sm:text-sm text-white bg-[#1A73E8] hover:bg-[#1557B0] disabled:opacity-50 transition-all shadow-md shadow-blue-600/20 active:scale-98 cursor-pointer flex items-center justify-center gap-2"
                 >
-                  {isSubmittingFeedback ? "Mengirim Masukan..." : "Kirim Masukan Internal"}
+                  {isSubmittingFeedback ? (
+                    <span>Mengirimkan Masukan...</span>
+                  ) : (
+                    <>
+                      <span>Kirim Masukan ke Pengelola</span>
+                      <CheckCircle2 className="w-4 h-4" />
+                    </>
+                  )}
                 </button>
+
+                {/* Alternatif WhatsApp Langsung */}
+                <div className="pt-2 text-center">
+                  <a
+                    href={effectiveWhatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-emerald-700 hover:text-emerald-800 transition-colors"
+                  >
+                    <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Atau langsung chat WhatsApp pengelola</span>
+                  </a>
+                </div>
               </form>
             ) : (
-              <div className="mt-3 p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-center">
-                <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-800">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  Masukan Telah Diterima
+              <div className="space-y-3 animate-in fade-in zoom-in-95 duration-200">
+                <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-center">
+                  <div className="inline-flex items-center gap-2 text-sm font-bold text-emerald-800 mb-1">
+                    <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                    <span>Masukan Diterima Pengelola!</span>
+                  </div>
+                  <p className="text-xs text-emerald-700 leading-relaxed">
+                    Terima kasih atas waktu dan kepedulian Anda. Kritik & saran ini telah diteruskan secara otomatis ke tim manajemen kami.
+                  </p>
                 </div>
-                <p className="text-[11px] text-emerald-700 mt-0.5">
-                  Terima kasih banyak, kritik & saran Anda akan menjadi prioritas evaluasi kami.
-                </p>
+
+                {/* Tombol Lanjutan ke WhatsApp bila pelanggan ingin kirim foto bukti */}
+                <a
+                  href={effectiveWhatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-bold text-xs sm:text-sm text-white bg-emerald-600 hover:bg-emerald-700 shadow-md shadow-emerald-600/20 transition-all transform active:scale-98"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  <span>Kirim Pesan ke WhatsApp Pengelola</span>
+                </a>
               </div>
             )}
 

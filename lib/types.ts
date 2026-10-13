@@ -9,10 +9,35 @@ export interface Plate {
   scanCount: number;
   routingMode?: RoutingMode; // 'smart_filter' (bintang 1-5 filter) atau 'direct' (langsung ke Google)
   feedbackWhatsapp?: string; // Nomor WhatsApp pengaduan untuk rating 1-3
+  webhookUrl?: string; // Webhook alert URL (Discord, Slack, n8n, CRM) untuk rating 1-3
   minGoogleRating?: number; // Ambang batas minimum untuk diarahkan ke Google Review (default: 4)
   ownerEmail?: string;
   createdAt: string;
   updatedAt: string;
+}
+
+export type FeedbackStatus = "unread" | "resolved" | "archived";
+
+export interface FeedbackRecord {
+  id: string;
+  plateCode: string;
+  businessName: string;
+  rating: number; // 1, 2, or 3
+  feedbackText: string;
+  customerName?: string;
+  customerPhone?: string;
+  status: FeedbackStatus;
+  notifiedViaWebhook?: boolean;
+  webhookResponseStatus?: number;
+  createdAt: string;
+}
+
+export interface CreateFeedbackInput {
+  plateCode: string;
+  rating: number;
+  feedbackText: string;
+  customerName?: string;
+  customerPhone?: string;
 }
 
 export interface ScanLog {
@@ -29,6 +54,7 @@ export interface ActivatePlateInput {
   googleReviewUrl: string;
   routingMode?: RoutingMode;
   feedbackWhatsapp?: string;
+  webhookUrl?: string;
   minGoogleRating?: number;
   ownerEmail?: string;
 }
@@ -39,6 +65,7 @@ export interface UpdatePlateInput {
   businessName?: string;
   routingMode?: RoutingMode;
   feedbackWhatsapp?: string;
+  webhookUrl?: string;
   minGoogleRating?: number;
 }
 

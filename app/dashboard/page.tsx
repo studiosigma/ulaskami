@@ -21,24 +21,35 @@ import {
   Printer,
   Box,
   Layers,
+  Webhook,
+  Radio,
+  MessageSquareWarning,
 } from "lucide-react";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
-import { Plate, SessionUser, RoutingMode } from "@/lib/types";
+import { Plate, SessionUser, RoutingMode, FeedbackRecord, FeedbackStatus } from "@/lib/types";
 import { validateGoogleReviewUrl } from "@/lib/utils/url";
 import StandArtworkModal from "@/components/print/StandArtworkModal";
 import BatchGeneratorModal from "@/components/admin/BatchGeneratorModal";
 import AnalyticsDashboard from "@/components/analytics/AnalyticsDashboard";
+import FeedbackInbox from "@/components/dashboard/FeedbackInbox";
 
 export default function DashboardPage() {
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState<SessionUser | null>(null);
   const [plates, setPlates] = useState<Plate[]>([]);
+  const [feedbacks, setFeedbacks] = useState<FeedbackRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [editingCode, setEditingCode] = useState<string | null>(null);
   const [newReviewUrl, setNewReviewUrl] = useState("");
   const [newRoutingMode, setNewRoutingMode] = useState<RoutingMode>("smart_filter");
   const [newFeedbackWhatsapp, setNewFeedbackWhatsapp] = useState("");
+  const [newWebhookUrl, setNewWebhookUrl] = useState("");
+  const [isTestingWebhook, setIsTestingWebhook] = useState(false);
+  const [webhookTestResult, setWebhookTestResult] = useState<{
+    success: boolean;
+    message: string;
+  } | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [editError, setEditError] = useState<string | null>(null);
@@ -67,6 +78,15 @@ export default function DashboardPage() {
       }
       if (data.dataLayer) {
         setDataLayerInfo(data.dataLayer);
+      }
+
+      // Refresh feedback inbox
+      const fbRes = await fetch("/api/feedback");
+      if (fbRes.ok) {
+        const fbData = await fbRes.json();
+        if (fbData.feedbacks) {
+          setFeedbacks(fbData.feedbacks);
+        }
       }
     } catch (err) {
       console.error("Gagal memuat plates:", err);
@@ -106,6 +126,16 @@ export default function DashboardPage() {
         }
       });
 
+    // Fetch feedback inbox
+    fetch("/api/feedback")
+      .then((res) => res.json())
+      .then((data) => {
+        if (!ignore && data?.feedbacks) {
+          setFeedbacks(data.feedbacks);
+        }
+      })
+      .catch(() => {});
+
     return () => {
       ignore = true;
     };
@@ -125,6 +155,8 @@ export default function DashboardPage() {
     setNewReviewUrl(plate.googleReviewUrl);
     setNewRoutingMode(plate.routingMode || "smart_filter");
     setNewFeedbackWhatsapp(plate.feedbackWhatsapp || "");
+    setNewWebhookUrl(plate.webhookUrl || "");
+    setWebhookTestResult(null);
     setEditError(null);
   };
 
@@ -133,7 +165,59 @@ export default function DashboardPage() {
     setNewReviewUrl("");
     setNewRoutingMode("smart_filter");
     setNewFeedbackWhatsapp("");
+    setNewWebhookUrl("");
+    setWebhookTestResult(null);
     setEditError(null);
+  };
+
+  const handleTestWebhookPing = async (businessName: string) => {
+    if (!newWebhookUrl.trim()) {
+      setWebhookTestResult({
+        success: false,
+        message: "Silakan masukkan URL Webhook terlebih dahulu.",
+      });
+      return;
+    }
+
+    setIsTestingWebhook(true);
+    setWebhookTestResult(null);
+
+    try {
+      const res = await fetch("/api/webhook/test", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          webhookUrl: newWebhookUrl.trim(),
+          businessName,
+        }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setWebhookTestResult({
+          success: true,
+          message: `✓ Webhook berhasil terhubung! (HTTP ${data.statusCode || 200})`,
+        });
+      } else {
+        setWebhookTestResult({
+          success: false,
+          message: `✗ Gagal terhubung: ${data.error || "Server menolak request"}`,
+        });
+      }
+    } catch {
+      setWebhookTestResult({
+        success: false,
+        message: "✗ Gagal menghubungi endpoint webhook.",
+      });
+    } finally {
+      setIsTestingWebhook(false);
+    }
+  };
+
+  const handleFeedbackStatusChange = (id: string, newStatus: FeedbackStatus) => {
+    setFeedbacks((prev) =>
+      prev.map((f) => (f.id === id ? { ...f, status: newStatus } : f))
+    );
   };
 
   const handleSaveUrl = async (code: string) => {
@@ -156,6 +240,7 @@ export default function DashboardPage() {
           googleReviewUrl: validation.normalizedUrl,
           routingMode: newRoutingMode,
           feedbackWhatsapp: newFeedbackWhatsapp.trim(),
+          webhookUrl: newWebhookUrl.trim(),
         }),
       });
 
@@ -257,37 +342,54 @@ export default function DashboardPage() {
             </div>
           )}
 
-          {/* Quick Metrics Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
-            <div className="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-xs flex items-center justify-between">
+          {/* Quick Metrics Grid (Google 4-Color styled) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mb-8">
+            {/* Card 1: Total Plate (Green) */}
+            <div className="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-2xs flex items-center justify-between">
               <div>
                 <p className="text-xs font-bold uppercase tracking-wider text-gray-400">Total Plate</p>
                 <p className="text-3xl font-black text-gray-900 mt-1">{plates.length}</p>
-                <p className="text-[11px] text-green-700 mt-0.5">{activePlates} Plate Aktif</p>
+                <p className="text-[11px] text-[#34A853] font-semibold mt-0.5">{activePlates} Plate Aktif</p>
               </div>
-              <div className="w-12 h-12 rounded-xl bg-green-50 text-green-700 flex items-center justify-center border border-green-100">
+              <div className="w-12 h-12 rounded-xl bg-emerald-50 text-[#34A853] flex items-center justify-center border border-emerald-100">
                 <Store className="w-6 h-6" />
               </div>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-xs flex items-center justify-between">
+            {/* Card 2: Total Tap & Scan (Blue) */}
+            <div className="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-2xs flex items-center justify-between">
               <div>
                 <p className="text-xs font-bold uppercase tracking-wider text-gray-400">Total Tap & Scan</p>
                 <p className="text-3xl font-black text-gray-900 mt-1">{totalScans}</p>
-                <p className="text-[11px] text-gray-500 mt-0.5">Pengunjung membuka review</p>
+                <p className="text-[11px] text-[#1A73E8] font-semibold mt-0.5">Kunjungan buka review</p>
               </div>
-              <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center border border-blue-100">
+              <div className="w-12 h-12 rounded-xl bg-blue-50 text-[#1A73E8] flex items-center justify-center border border-blue-100">
                 <TrendingUp className="w-6 h-6" />
               </div>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-xs flex items-center justify-between">
+            {/* Card 3: Feedback Masuk Tersaring (Red / Amber Alert) */}
+            <div className="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-2xs flex items-center justify-between">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wider text-gray-400">Feedback Tersaring</p>
+                <p className="text-3xl font-black text-gray-900 mt-1">{feedbacks.length}</p>
+                <p className="text-[11px] text-[#EA4335] font-semibold mt-0.5">
+                  {feedbacks.filter((f) => f.status === "unread").length} Perlu Ditanggapi
+                </p>
+              </div>
+              <div className="w-12 h-12 rounded-xl bg-red-50 text-[#EA4335] flex items-center justify-center border border-red-100">
+                <MessageSquareWarning className="w-6 h-6" />
+              </div>
+            </div>
+
+            {/* Card 4: Status Data Layer (Amber / Database) */}
+            <div className="bg-white p-5 rounded-2xl border border-gray-200/80 shadow-2xs flex items-center justify-between">
               <div>
                 <p className="text-xs font-bold uppercase tracking-wider text-gray-400">Status Data Layer</p>
                 <p className="text-sm font-bold text-gray-900 mt-1">
                   {dataLayerInfo?.mode === "postgres" ? "PostgreSQL Cloud" : "In-Memory Safe Mode"}
                 </p>
-                <p className={`text-[11px] mt-0.5 ${dataLayerInfo?.mode === "postgres" ? "text-green-700 font-semibold" : "text-amber-700"}`}>
+                <p className={`text-[11px] mt-0.5 ${dataLayerInfo?.mode === "postgres" ? "text-green-700 font-semibold" : "text-amber-700 font-medium"}`}>
                   {dataLayerInfo?.label || "PostgreSQL Hybrid Mode"}
                 </p>
               </div>
@@ -300,6 +402,14 @@ export default function DashboardPage() {
           {/* Visual Analytics & Peak Hour Detection */}
           {!isLoading && plates.length > 0 && (
             <AnalyticsDashboard plates={plates} />
+          )}
+
+          {/* Customer Feedback Inbox (Smart Filter Complaint Monitoring) */}
+          {!isLoading && (
+            <FeedbackInbox
+              feedbacks={feedbacks}
+              onFeedbackStatusChange={handleFeedbackStatusChange}
+            />
           )}
 
           {/* Plates Table / Card List */}
@@ -447,20 +557,66 @@ export default function DashboardPage() {
 
                             {/* WhatsApp Keluhan (Hanya jika Smart Filter aktif) */}
                             {newRoutingMode === "smart_filter" && (
-                              <div>
-                                <label className="block text-xs font-bold text-gray-700 mb-1">
-                                  Nomor WhatsApp Pengaduan Masukan (Opsional)
-                                </label>
-                                <input
-                                  type="tel"
-                                  value={newFeedbackWhatsapp}
-                                  onChange={(e) => setNewFeedbackWhatsapp(e.target.value)}
-                                  placeholder="Misal: 08123456789 (default ke nomor utama jika dikosongkan)"
-                                  className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-gray-300 focus:border-green-500 focus:ring-1 focus:ring-green-100 bg-white outline-none"
-                                />
-                                <p className="text-[10px] text-gray-400 mt-1">
-                                  Pelanggan yang memilih bintang 1–3 akan diarahkan untuk mengirim keluhan ke nomor ini.
-                                </p>
+                              <div className="space-y-4">
+                                <div>
+                                  <label className="block text-xs font-bold text-gray-700 mb-1">
+                                    Nomor WhatsApp Pengaduan Masukan (Opsional)
+                                  </label>
+                                  <input
+                                    type="tel"
+                                    value={newFeedbackWhatsapp}
+                                    onChange={(e) => setNewFeedbackWhatsapp(e.target.value)}
+                                    placeholder="Misal: 08123456789 (default ke nomor utama jika dikosongkan)"
+                                    className="w-full px-3 py-2 text-xs font-mono rounded-lg border border-gray-300 focus:border-[#1A73E8] focus:ring-1 focus:ring-blue-100 bg-white outline-none"
+                                  />
+                                  <p className="text-[10px] text-gray-400 mt-1">
+                                    Pelanggan yang memilih bintang 1–3 akan diarahkan untuk mengirim keluhan ke nomor ini.
+                                  </p>
+                                </div>
+
+                                {/* Webhook Alert Otomatis (Discord / Slack / n8n / Make / CRM) */}
+                                <div className="space-y-1.5 pt-3 border-t border-gray-200">
+                                  <div className="flex items-center gap-1.5 text-xs font-bold text-gray-700">
+                                    <Webhook className="w-3.5 h-3.5 text-[#1A73E8]" />
+                                    <span>Webhook Alert URL Otomatis</span>
+                                    <span className="text-[10px] font-normal text-gray-400">(Discord, Slack, n8n, CRM)</span>
+                                  </div>
+                                  <div className="flex flex-col sm:flex-row gap-2">
+                                    <input
+                                      type="url"
+                                      value={newWebhookUrl}
+                                      onChange={(e) => {
+                                        setNewWebhookUrl(e.target.value);
+                                        setWebhookTestResult(null);
+                                      }}
+                                      placeholder="https://discord.com/api/webhooks/... atau https://hooks.slack.com/..."
+                                      className="flex-1 px-3 py-2 text-xs font-mono rounded-lg border border-gray-300 focus:border-[#1A73E8] focus:ring-1 focus:ring-blue-100 bg-white outline-none"
+                                    />
+                                    <button
+                                      type="button"
+                                      disabled={!newWebhookUrl.trim() || isTestingWebhook}
+                                      onClick={() => handleTestWebhookPing(plate.businessName || "Outlet")}
+                                      className="px-3.5 py-2 rounded-lg text-xs font-bold text-gray-700 hover:text-[#1A73E8] bg-white hover:bg-blue-50 border border-gray-300 hover:border-blue-200 disabled:opacity-50 transition-colors shrink-0 cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs"
+                                    >
+                                      <Radio className="w-3.5 h-3.5 text-blue-600" />
+                                      <span>{isTestingWebhook ? "Menguji..." : "Uji Coba Ping"}</span>
+                                    </button>
+                                  </div>
+                                  <p className="text-[10px] text-gray-400 leading-tight">
+                                    Sistem akan otomatis mengirimkan payload alert saat ada rating 1–3 ke channel Discord / Slack / CRM tim Anda.
+                                  </p>
+                                  {webhookTestResult && (
+                                    <div
+                                      className={`p-2.5 rounded-lg text-xs font-semibold ${
+                                        webhookTestResult.success
+                                          ? "bg-green-50 text-green-800 border border-green-200"
+                                          : "bg-red-50 text-red-800 border border-red-200"
+                                      }`}
+                                    >
+                                      {webhookTestResult.message}
+                                    </div>
+                                  )}
+                                </div>
                               </div>
                             )}
 

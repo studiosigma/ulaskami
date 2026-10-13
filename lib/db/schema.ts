@@ -100,17 +100,36 @@ export async function initDatabaseSchema(): Promise<void> {
           feedback_whatsapp VARCHAR(30) DEFAULT '',
           min_google_rating INTEGER DEFAULT 4,
           owner_email VARCHAR(255),
+          webhook_url VARCHAR(500) DEFAULT '',
           created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
         );
       `);
 
-      // 1b. Auto-migration jika tabel plates sudah ada sebelumnya tapi belum memiliki kolom routing
+      // 1b. Auto-migration jika tabel plates sudah ada sebelumnya tapi belum memiliki kolom routing/webhook
       await query(`ALTER TABLE plates ADD COLUMN IF NOT EXISTS routing_mode VARCHAR(20) DEFAULT 'smart_filter';`);
       await query(`ALTER TABLE plates ADD COLUMN IF NOT EXISTS feedback_whatsapp VARCHAR(30) DEFAULT '';`);
       await query(`ALTER TABLE plates ADD COLUMN IF NOT EXISTS min_google_rating INTEGER DEFAULT 4;`);
+      await query(`ALTER TABLE plates ADD COLUMN IF NOT EXISTS webhook_url VARCHAR(500) DEFAULT '';`);
 
-      // 2. Buat tabel scan_logs
+      // 2. Buat tabel feedbacks (Smart Filter Complaint Inbox)
+      await query(`
+        CREATE TABLE IF NOT EXISTS feedbacks (
+          id VARCHAR(64) PRIMARY KEY,
+          plate_code VARCHAR(20) NOT NULL,
+          business_name VARCHAR(255) DEFAULT '',
+          rating INTEGER NOT NULL,
+          feedback_text TEXT NOT NULL,
+          customer_name VARCHAR(150) DEFAULT '',
+          customer_phone VARCHAR(50) DEFAULT '',
+          status VARCHAR(20) DEFAULT 'unread',
+          notified_via_webhook BOOLEAN DEFAULT FALSE,
+          webhook_response_status INTEGER DEFAULT NULL,
+          created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+        );
+      `);
+
+      // 3. Buat tabel scan_logs
       await query(`
         CREATE TABLE IF NOT EXISTS scan_logs (
           id VARCHAR(64) PRIMARY KEY,
@@ -121,7 +140,7 @@ export async function initDatabaseSchema(): Promise<void> {
         );
       `);
 
-      // 3. Buat tabel merchants untuk sistem autentikasi
+      // 4. Buat tabel merchants untuk sistem autentikasi
       await query(`
         CREATE TABLE IF NOT EXISTS merchants (
           id VARCHAR(64) PRIMARY KEY,
@@ -134,9 +153,11 @@ export async function initDatabaseSchema(): Promise<void> {
         );
       `);
 
-      // 4. Buat indeks untuk performa pencarian
+      // 5. Buat indeks untuk performa pencarian
       await query(`CREATE INDEX IF NOT EXISTS idx_plates_code ON plates(code);`);
       await query(`CREATE INDEX IF NOT EXISTS idx_plates_owner_email ON plates(owner_email);`);
+      await query(`CREATE INDEX IF NOT EXISTS idx_feedbacks_plate_code ON feedbacks(plate_code);`);
+      await query(`CREATE INDEX IF NOT EXISTS idx_feedbacks_created_at ON feedbacks(created_at);`);
       await query(`CREATE INDEX IF NOT EXISTS idx_scan_logs_plate_code ON scan_logs(plate_code);`);
       await query(`CREATE INDEX IF NOT EXISTS idx_merchants_email ON merchants(email);`);
 
