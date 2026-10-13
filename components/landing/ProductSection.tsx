@@ -97,21 +97,21 @@ export function ProductSection() {
               ))}
             </div>
 
-            {/* Material & Size badge */}
+            {/* Material & Model badge */}
             <div className="mt-6 flex flex-wrap items-center gap-4 text-xs text-gray-500 bg-white p-3.5 rounded-xl border border-gray-200 shadow-2xs">
               <div className="flex items-center gap-1.5">
-                <span className="font-semibold text-gray-800">Dimensi:</span>
-                <span>Stand A6 (10.5 x 14.8 cm)</span>
+                <span className="font-semibold text-gray-800">Pilihan Model:</span>
+                <span>Stand Meja Kasir &amp; Tempel Kaca</span>
               </div>
               <span className="text-gray-300">•</span>
               <div className="flex items-center gap-1.5">
-                <span className="font-semibold text-gray-800">Tebal:</span>
-                <span>3mm Cast Acrylic Premium</span>
+                <span className="font-semibold text-gray-800">Material:</span>
+                <span>Cast Acrylic Premium</span>
               </div>
               <span className="text-gray-300">•</span>
               <div className="flex items-center gap-1.5">
-                <span className="font-semibold text-gray-800">Dudukan:</span>
-                <span>Solid Stand Included</span>
+                <span className="font-semibold text-gray-800">Koneksi:</span>
+                <span>NFC Tap &amp; Laser QR</span>
               </div>
             </div>
 
