@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { Star, MessageSquare, ExternalLink, ThumbsUp, CheckCircle2, Store, HeartHandshake } from "lucide-react";
 import { Plate } from "@/lib/types";
 import { SITE_CONFIG } from "@/lib/config";
@@ -12,23 +13,23 @@ interface ReviewGateProps {
 const RATING_FEEDBACK = {
   5: {
     label: "Luar Biasa! Sangat Puas 😍",
-    color: "text-emerald-600 bg-emerald-50 border-emerald-200",
+    color: "text-emerald-700 bg-emerald-50 border-emerald-200",
   },
   4: {
     label: "Puas & Menyenangkan 😊",
-    color: "text-emerald-600 bg-emerald-50 border-emerald-200",
+    color: "text-blue-700 bg-blue-50 border-blue-200",
   },
   3: {
     label: "Cukup Baik 🙂",
-    color: "text-amber-600 bg-amber-50 border-amber-200",
+    color: "text-amber-700 bg-amber-50 border-amber-200",
   },
   2: {
     label: "Kurang Memuaskan 🙁",
-    color: "text-amber-700 bg-amber-50 border-amber-200",
+    color: "text-amber-800 bg-amber-50 border-amber-200",
   },
   1: {
     label: "Sangat Mengecewakan 😞",
-    color: "text-rose-600 bg-rose-50 border-rose-200",
+    color: "text-[#EA4335] bg-red-50 border-red-200",
   },
 };
 
@@ -63,23 +64,33 @@ export default function ReviewGate({ plate }: ReviewGateProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 flex flex-col justify-between p-4 sm:p-6">
+    <div className="min-h-screen bg-slate-50/70 flex flex-col justify-between p-4 sm:p-6">
       {/* Top Header & Branding */}
       <header className="w-full max-w-md mx-auto pt-4 pb-2 text-center">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-100 mb-4 shadow-xs">
-          <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
-          Ulaskami Smart Review
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-slate-800 border border-slate-200 shadow-2xs mb-4">
+          <Image
+            src="/logo-icon.png"
+            alt="Ulaskami Logo"
+            width={16}
+            height={19}
+            className="w-3.5 h-auto object-contain"
+            priority
+          />
+          <span>Ulaskami Smart Review</span>
         </div>
       </header>
 
       {/* Main Review Card */}
-      <main className="w-full max-w-md mx-auto bg-white rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-100 p-6 sm:p-8 transition-all">
+      <main className="w-full max-w-md mx-auto bg-white rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 p-6 sm:p-8 transition-all relative overflow-hidden">
+        {/* Top Google 4-Color Gradient Line */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#4285F4] via-[#EA4335] via-[#FBBC05] to-[#34A853]" />
+
         {/* Business Info Header */}
         <div className="text-center mb-6">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-600 to-indigo-500 text-white flex items-center justify-center mx-auto mb-3 shadow-md shadow-indigo-200">
-            <Store className="w-8 h-8" />
+          <div className="w-14 h-14 rounded-2xl bg-blue-50 border border-blue-100 text-[#1A73E8] flex items-center justify-center mx-auto mb-3 shadow-xs">
+            <Store className="w-7 h-7" />
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+          <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
             {plate.businessName || "Bisnis Kami"}
           </h1>
           <p className="text-sm text-slate-500 mt-1">
@@ -105,8 +116,8 @@ export default function ReviewGate({ plate }: ReviewGateProps) {
                   <Star
                     className={`w-10 h-10 sm:w-11 sm:h-11 transition-colors duration-150 ${
                       isFilled
-                        ? "text-amber-400 fill-amber-400 drop-shadow-sm"
-                        : "text-slate-300 hover:text-amber-200"
+                        ? "text-amber-400 fill-amber-400 drop-shadow-xs"
+                        : "text-slate-200 hover:text-amber-200"
                     }`}
                   />
                 </button>
@@ -117,7 +128,7 @@ export default function ReviewGate({ plate }: ReviewGateProps) {
           {/* Emotional Label */}
           {rating ? (
             <div
-              className={`mt-4 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-medium border animate-in fade-in zoom-in-95 duration-200 ${
+              className={`mt-4 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-semibold border animate-in fade-in zoom-in-95 duration-200 ${
                 RATING_FEEDBACK[rating as keyof typeof RATING_FEEDBACK].color
               }`}
             >
@@ -132,9 +143,9 @@ export default function ReviewGate({ plate }: ReviewGateProps) {
 
         {/* Action Panel Based on Rating */}
         {isPositive && (
-          <div className="mt-2 p-5 bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100 rounded-2xl animate-in fade-in slide-in-from-bottom-3 duration-300">
-            <div className="flex items-center gap-2 text-emerald-800 font-semibold mb-1 text-sm sm:text-base">
-              <ThumbsUp className="w-5 h-5 text-emerald-600 shrink-0" />
+          <div className="mt-2 p-5 bg-gradient-to-br from-blue-50/80 via-emerald-50/40 to-white border border-blue-100 rounded-2xl animate-in fade-in slide-in-from-bottom-3 duration-300">
+            <div className="flex items-center gap-2 text-[#1A73E8] font-bold mb-1 text-sm sm:text-base">
+              <ThumbsUp className="w-5 h-5 text-[#34A853] shrink-0" />
               <span>Terima kasih banyak!</span>
             </div>
             <p className="text-xs sm:text-sm text-slate-600 mb-4 leading-relaxed">
@@ -144,10 +155,17 @@ export default function ReviewGate({ plate }: ReviewGateProps) {
               href={plate.googleReviewUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full inline-flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl font-semibold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-md shadow-emerald-600/20 transition-all transform active:scale-98 text-sm sm:text-base"
+              className="w-full inline-flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl font-bold text-white bg-[#1A73E8] hover:bg-[#1557B0] shadow-md shadow-blue-600/25 transition-all transform active:scale-98 text-sm sm:text-base"
             >
+              <Image
+                src="/logo-icon.png"
+                alt="Google Star Pin"
+                width={20}
+                height={24}
+                className="w-4.5 h-auto object-contain shrink-0"
+              />
               <span>Tulis Ulasan di Google Maps</span>
-              <ExternalLink className="w-4 h-4" />
+              <ExternalLink className="w-4 h-4 ml-0.5" />
             </a>
             <p className="text-[11px] text-center text-slate-400 mt-2">
               Hanya butuh 10 detik di aplikasi Google

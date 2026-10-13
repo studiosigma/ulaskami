@@ -81,12 +81,15 @@ export default function AnalyticsDashboard({
   const maxHourlyCount = Math.max(...hourlyCounts, 3);
 
   return (
-    <div className="bg-white rounded-3xl border border-gray-200/90 shadow-sm p-6 sm:p-8 space-y-8 mb-10 transition-all">
+    <div className="bg-white rounded-3xl border border-gray-200/90 shadow-sm p-6 sm:p-8 space-y-8 mb-10 transition-all relative overflow-hidden">
+      {/* Top Google 4-Color Gradient Line */}
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#4285F4] via-[#EA4335] via-[#FBBC05] to-[#34A853]" />
+
       {/* Top Header & Selector */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-gray-100">
         <div className="space-y-1">
-          <div className="inline-flex items-center gap-2 bg-indigo-50 border border-indigo-200/80 px-3 py-1 rounded-full text-xs font-semibold text-indigo-800">
-            <BarChart3 className="w-3.5 h-3.5 text-indigo-600" />
+          <div className="inline-flex items-center gap-2 bg-blue-50 border border-blue-200/80 px-3 py-1 rounded-full text-xs font-semibold text-[#1A73E8]">
+            <BarChart3 className="w-3.5 h-3.5 text-[#1A73E8]" />
             <span>Wawasan & Analisis Performa Review</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
@@ -124,7 +127,7 @@ export default function AnalyticsDashboard({
               onClick={() => setDaysRange(7)}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 daysRange === 7
-                  ? "bg-white text-indigo-700 shadow-2xs"
+                  ? "bg-white text-[#1A73E8] shadow-2xs"
                   : "text-gray-600 hover:text-gray-900"
               }`}
             >
@@ -135,7 +138,7 @@ export default function AnalyticsDashboard({
               onClick={() => setDaysRange(30)}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 daysRange === 30
-                  ? "bg-white text-indigo-700 shadow-2xs"
+                  ? "bg-white text-[#1A73E8] shadow-2xs"
                   : "text-gray-600 hover:text-gray-900"
               }`}
             >
@@ -146,7 +149,7 @@ export default function AnalyticsDashboard({
           {/* Export CSV Button */}
           <a
             href={exportCsvUrl}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-gray-700 hover:text-indigo-700 bg-white hover:bg-indigo-50 border border-gray-200 hover:border-indigo-200 transition-colors shadow-2xs cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-gray-700 hover:text-[#1A73E8] bg-white hover:bg-blue-50 border border-gray-200 hover:border-blue-200 transition-colors shadow-2xs cursor-pointer"
             title="Unduh seluruh data log mentah dalam format CSV"
           >
             <Download className="w-3.5 h-3.5 text-gray-500" />
@@ -155,13 +158,13 @@ export default function AnalyticsDashboard({
         </div>
       </div>
 
-      {/* Metric Overview Cards */}
+      {/* Metric Overview Cards: Google 4-Color Styled */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Card 1: Total Tap */}
-        <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-indigo-50/60 to-white border border-indigo-100/80 shadow-2xs">
-          <div className="flex items-center justify-between text-indigo-600 mb-2">
-            <span className="text-xs font-bold text-indigo-900 uppercase tracking-wider">Total Tap / Scan</span>
-            <TrendingUp className="w-4 h-4 text-indigo-600" />
+        {/* Card 1: Total Tap (Google Blue) */}
+        <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-blue-50/70 to-white border border-blue-100 shadow-2xs">
+          <div className="flex items-center justify-between text-[#1A73E8] mb-2">
+            <span className="text-xs font-bold text-blue-900 uppercase tracking-wider">Total Tap / Scan</span>
+            <TrendingUp className="w-4 h-4 text-[#1A73E8]" />
           </div>
           <div className="text-2xl sm:text-3xl font-extrabold text-slate-900">
             {isLoading ? "..." : analytics?.totalScans || 0}
@@ -171,11 +174,11 @@ export default function AnalyticsDashboard({
           </p>
         </div>
 
-        {/* Card 2: Rata-rata Harian */}
-        <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-emerald-50/60 to-white border border-emerald-100/80 shadow-2xs">
-          <div className="flex items-center justify-between text-emerald-600 mb-2">
+        {/* Card 2: Rata-rata Harian (Google Green) */}
+        <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-emerald-50/70 to-white border border-emerald-100 shadow-2xs">
+          <div className="flex items-center justify-between text-[#34A853] mb-2">
             <span className="text-xs font-bold text-emerald-900 uppercase tracking-wider">Rata-rata Harian</span>
-            <Calendar className="w-4 h-4 text-emerald-600" />
+            <Calendar className="w-4 h-4 text-[#34A853]" />
           </div>
           <div className="text-2xl sm:text-3xl font-extrabold text-slate-900">
             {isLoading ? "..." : `${analytics?.averageDailyScans || 0}`}
@@ -186,11 +189,11 @@ export default function AnalyticsDashboard({
           </p>
         </div>
 
-        {/* Card 3: Jam Sibuk (Peak Hour) */}
-        <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-amber-50/60 to-white border border-amber-100/80 shadow-2xs">
+        {/* Card 3: Jam Sibuk (Google Yellow / Amber) */}
+        <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-amber-50/70 to-white border border-amber-100 shadow-2xs">
           <div className="flex items-center justify-between text-amber-600 mb-2">
             <span className="text-xs font-bold text-amber-900 uppercase tracking-wider">Jam Paling Ramai</span>
-            <Clock className="w-4 h-4 text-amber-600" />
+            <Clock className="w-4 h-4 text-[#FBBC05]" />
           </div>
           <div className="text-2xl sm:text-3xl font-extrabold text-amber-900 flex items-center gap-1.5">
             {isLoading ? "..." : analytics?.busiestHour.label || "13:00"}
@@ -203,11 +206,11 @@ export default function AnalyticsDashboard({
           </p>
         </div>
 
-        {/* Card 4: Platform Terbanyak */}
-        <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-slate-50 to-white border border-slate-200/80 shadow-2xs">
-          <div className="flex items-center justify-between text-slate-600 mb-2">
-            <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">Perangkat Pelanggan</span>
-            <Smartphone className="w-4 h-4 text-slate-600" />
+        {/* Card 4: Platform Terbanyak (Google Red Accent) */}
+        <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-red-50/40 via-white to-white border border-red-100/70 shadow-2xs">
+          <div className="flex items-center justify-between text-[#EA4335] mb-2">
+            <span className="text-xs font-bold text-red-900 uppercase tracking-wider">Perangkat Pelanggan</span>
+            <Smartphone className="w-4 h-4 text-[#EA4335]" />
           </div>
           <div className="text-2xl sm:text-3xl font-extrabold text-slate-900">
             {isLoading ? "..." : `${analytics?.deviceBreakdown.iosPercentage || 60}%`}
@@ -228,7 +231,7 @@ export default function AnalyticsDashboard({
           </h3>
 
           {hoveredPoint && (
-            <div className="text-xs font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full animate-in fade-in duration-150">
+            <div className="text-xs font-bold text-[#1A73E8] bg-blue-50 border border-blue-100 px-3 py-1 rounded-full animate-in fade-in duration-150">
               {hoveredPoint.dayLabel}: <strong>{hoveredPoint.count} scan</strong>
             </div>
           )}
@@ -264,14 +267,14 @@ export default function AnalyticsDashboard({
                         </div>
                       )}
 
-                      {/* Bar Fill */}
+                      {/* Bar Fill: Google Blue */}
                       <div
                         style={{ height: `${heightPercent}%` }}
                         className={`w-full max-w-[28px] rounded-t-lg transition-all duration-200 ${
                           point.count > 0
                             ? isHovered
-                              ? "bg-indigo-600 shadow-md shadow-indigo-300"
-                              : "bg-indigo-500/85 hover:bg-indigo-600"
+                              ? "bg-[#1A73E8] shadow-md shadow-blue-300"
+                              : "bg-[#4285F4] hover:bg-[#1A73E8]"
                             : "bg-slate-200/60"
                         }`}
                       />
@@ -328,9 +331,9 @@ export default function AnalyticsDashboard({
                       style={{ height: `${heightPercent}%` }}
                       className={`w-full rounded-t-sm transition-all ${
                         peak.isPeak
-                          ? "bg-amber-500 shadow-xs"
+                          ? "bg-[#FBBC05] shadow-xs"
                           : peak.count > 0
-                          ? "bg-slate-400/80 hover:bg-slate-600"
+                          ? "bg-amber-300/80 hover:bg-amber-400"
                           : "bg-slate-200/50"
                       }`}
                     />
@@ -363,7 +366,7 @@ export default function AnalyticsDashboard({
               (dengan konsentrasi ulasan jam makan siang & makan malam).
             </p>
             <div className="text-[11px] text-slate-500 bg-white/80 p-2.5 rounded-xl border border-amber-200/60 flex items-start gap-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-3.5 h-3.5 text-[#34A853] shrink-0 mt-0.5" />
               <span>
                 <strong>Tips Operasional:</strong> Ingatkan barista/kasir Anda untuk menyapa dan meminta ulasan ramah pada jam-jam puncak tersebut!
               </span>
@@ -382,23 +385,23 @@ export default function AnalyticsDashboard({
             <div className="w-full h-3 rounded-full bg-slate-200 overflow-hidden flex">
               <div
                 style={{ width: `${analytics?.deviceBreakdown.iosPercentage || 50}%` }}
-                className="bg-indigo-600 h-full"
+                className="bg-[#1A73E8] h-full"
                 title={`Apple iOS: ${analytics?.deviceBreakdown.iosPercentage || 0}%`}
               />
               <div
                 style={{ width: `${analytics?.deviceBreakdown.androidPercentage || 50}%` }}
-                className="bg-emerald-500 h-full"
+                className="bg-[#34A853] h-full"
                 title={`Google Android: ${analytics?.deviceBreakdown.androidPercentage || 0}%`}
               />
             </div>
 
             <div className="flex items-center justify-between text-[11px] text-slate-500 pt-0.5">
               <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-indigo-600"></span>
+                <span className="w-2 h-2 rounded-full bg-[#1A73E8]"></span>
                 <span>iOS ({analytics?.deviceBreakdown.iosPercentage || 0}%)</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span className="w-2 h-2 rounded-full bg-[#34A853]"></span>
                 <span>Android ({analytics?.deviceBreakdown.androidPercentage || 0}%)</span>
               </div>
             </div>

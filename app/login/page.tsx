@@ -2,8 +2,9 @@
 
 import React, { useState, Suspense } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useSearchParams, useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight, Lock, Mail, Sparkles, AlertCircle, UserCheck } from "lucide-react";
+import { ArrowLeft, ArrowRight, Lock, Mail, AlertCircle, UserCheck } from "lucide-react";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 
@@ -55,10 +56,20 @@ function LoginForm() {
   };
 
   return (
-    <div className="bg-white rounded-3xl p-7 sm:p-10 border border-gray-200/90 shadow-xl shadow-green-950/5">
+    <div className="bg-white rounded-3xl p-7 sm:p-10 border border-gray-200/90 shadow-xl shadow-slate-200/50 relative overflow-hidden">
+      {/* Top Google 4-Color gradient line */}
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#4285F4] via-[#EA4335] via-[#FBBC05] to-[#34A853]" />
+
       <div className="text-center mb-8">
-        <div className="w-12 h-12 rounded-2xl bg-green-50 border border-green-200 text-green-700 flex items-center justify-center mx-auto mb-4 font-bold shadow-xs">
-          <Sparkles className="w-6 h-6 text-green-600" />
+        <div className="w-14 h-14 mx-auto mb-3 flex items-center justify-center">
+          <Image
+            src="/logo-icon.png"
+            alt="Ulaskami Logo"
+            width={52}
+            height={60}
+            className="w-auto h-13 object-contain drop-shadow-2xs"
+            priority
+          />
         </div>
         <h1 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
           Masuk ke Akun
@@ -67,7 +78,7 @@ function LoginForm() {
           Kelola plate dan tautan Google Review bisnis Anda.
         </p>
         {codeParam && (
-          <div className="mt-3 inline-block bg-green-50 text-green-800 text-xs px-3 py-1 rounded-full font-mono border border-green-200">
+          <div className="mt-3 inline-block bg-blue-50 text-[#1A73E8] text-xs px-3 py-1 rounded-full font-mono border border-blue-200">
             Aktivasi Plate: {codeParam}
           </div>
         )}
@@ -81,18 +92,18 @@ function LoginForm() {
       )}
 
       {/* 1-Click Demo Login Box */}
-      <div className="mb-5 p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200 text-xs text-amber-900 flex items-center justify-between gap-3">
+      <div className="mb-5 p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-800 flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <UserCheck className="w-4 h-4 text-amber-700 shrink-0" />
+          <UserCheck className="w-4 h-4 text-[#1A73E8] shrink-0" />
           <div>
             <span className="font-bold">Akun Merchant Demo:</span>
-            <span className="block text-[11px] text-amber-800">budi@kopikenangan.id</span>
+            <span className="block text-[11px] text-slate-500 font-mono">budi@kopikenangan.id</span>
           </div>
         </div>
         <button
           type="button"
           onClick={handleFillDemo}
-          className="px-2.5 py-1.5 bg-white border border-amber-300 rounded-lg text-xs font-bold text-amber-900 hover:bg-amber-100 transition-colors cursor-pointer shadow-2xs"
+          className="px-2.5 py-1.5 bg-white border border-slate-200 hover:border-blue-300 rounded-lg text-xs font-bold text-[#1A73E8] hover:bg-blue-50 transition-colors cursor-pointer shadow-2xs"
         >
           Isi Cepat
         </button>
@@ -111,7 +122,7 @@ function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="nama@bisnisanda.com"
-              className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 text-sm focus:border-green-500 focus:ring-2 focus:ring-green-100 outline-none"
+              className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 text-sm focus:border-[#1A73E8] focus:ring-2 focus:ring-blue-100 outline-hidden bg-gray-50/50"
             />
           </div>
         </div>
@@ -121,7 +132,7 @@ function LoginForm() {
             <label className="block text-xs font-bold uppercase tracking-wider text-gray-700">
               Kata Sandi
             </label>
-            <span className="text-[11px] text-gray-400">
+            <span className="text-[11px] text-gray-400 font-mono">
               Demo: password123
             </span>
           </div>
@@ -133,7 +144,7 @@ function LoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 text-sm focus:border-green-500 focus:ring-2 focus:ring-green-100 outline-none"
+              className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 text-sm focus:border-[#1A73E8] focus:ring-2 focus:ring-blue-100 outline-hidden bg-gray-50/50"
             />
           </div>
         </div>
@@ -141,7 +152,7 @@ function LoginForm() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full mt-2 py-3.5 px-4 rounded-xl font-bold text-sm text-white bg-green-600 hover:bg-green-700 shadow-md shadow-green-600/20 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+          className="w-full mt-2 py-3.5 px-4 rounded-xl font-bold text-sm text-white bg-[#1A73E8] hover:bg-[#1557B0] shadow-md shadow-blue-600/25 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
         >
           {isLoading ? (
             <span>Memeriksa kredensial...</span>
@@ -158,7 +169,7 @@ function LoginForm() {
         Belum punya akun?{" "}
         <Link
           href={`/register${codeParam ? `?code=${encodeURIComponent(codeParam)}` : ""}`}
-          className="font-bold text-green-700 hover:underline"
+          className="font-bold text-[#1A73E8] hover:underline"
         >
           Daftar sekarang
         </Link>

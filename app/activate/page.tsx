@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import {
   ArrowLeft,
   ArrowRight,
   ShieldCheck,
-  Sparkles,
   AlertCircle,
   CheckCircle2,
   ExternalLink,
@@ -205,7 +205,7 @@ function ActivateWizard() {
           <div
             className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
               step >= 1
-                ? "bg-green-600 text-white shadow-xs"
+                ? "bg-[#1A73E8] text-white shadow-xs"
                 : "bg-gray-100 text-gray-400"
             }`}
           >
@@ -216,13 +216,13 @@ function ActivateWizard() {
           </span>
         </div>
 
-        <div className={`h-0.5 flex-1 mx-3 transition-colors ${step >= 2 ? "bg-green-600" : "bg-gray-200"}`} />
+        <div className={`h-0.5 flex-1 mx-3 transition-colors ${step >= 2 ? "bg-[#1A73E8]" : "bg-gray-200"}`} />
 
         <div className="flex items-center gap-2">
           <div
             className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
               step >= 2
-                ? "bg-green-600 text-white shadow-xs"
+                ? "bg-[#FBBC05] text-slate-900 shadow-xs"
                 : "bg-gray-100 text-gray-400"
             }`}
           >
@@ -233,13 +233,13 @@ function ActivateWizard() {
           </span>
         </div>
 
-        <div className={`h-0.5 flex-1 mx-3 transition-colors ${step === 3 ? "bg-green-600" : "bg-gray-200"}`} />
+        <div className={`h-0.5 flex-1 mx-3 transition-colors ${step === 3 ? "bg-[#34A853]" : "bg-gray-200"}`} />
 
         <div className="flex items-center gap-2">
           <div
             className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
               step === 3
-                ? "bg-green-600 text-white shadow-xs"
+                ? "bg-[#34A853] text-white shadow-xs"
                 : "bg-gray-100 text-gray-400"
             }`}
           >
@@ -252,13 +252,23 @@ function ActivateWizard() {
       </div>
 
       {/* Main Card */}
-      <div className="bg-white rounded-3xl p-6 sm:p-9 border border-gray-200/90 shadow-xl shadow-green-950/5">
+      <div className="bg-white rounded-3xl p-6 sm:p-9 border border-gray-200/90 shadow-xl shadow-slate-200/50 relative overflow-hidden">
+        {/* Top Google 4-Color gradient line */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#4285F4] via-[#EA4335] via-[#FBBC05] to-[#34A853]" />
+
         {/* ================= STEP 1: KODE PLATE ================= */}
         {step === 1 && (
           <div>
             <div className="text-center mb-8">
-              <div className="w-12 h-12 rounded-2xl bg-green-50 border border-green-200 text-green-700 flex items-center justify-center mx-auto mb-4 font-bold shadow-xs">
-                <Sparkles className="w-6 h-6 text-green-600" />
+              <div className="w-14 h-14 mx-auto mb-3 flex items-center justify-center">
+                <Image
+                  src="/logo-icon.png"
+                  alt="Ulaskami Logo"
+                  width={52}
+                  height={60}
+                  className="w-auto h-13 object-contain drop-shadow-2xs"
+                  priority
+                />
               </div>
               <h1 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
                 Aktivasi Ulaskami Plate
@@ -285,7 +295,7 @@ function ActivateWizard() {
                   className={`w-full px-4 py-3.5 text-center text-xl font-mono font-bold tracking-widest rounded-xl border bg-gray-50/50 focus:bg-white focus:outline-none focus:ring-2 transition-all ${
                     error
                       ? "border-red-300 focus:border-red-500 focus:ring-red-200 text-red-900"
-                      : "border-gray-200 focus:border-green-500 focus:ring-green-100 text-gray-900"
+                      : "border-gray-200 focus:border-[#1A73E8] focus:ring-blue-100 text-gray-900"
                   }`}
                   maxLength={10}
                   autoComplete="off"
@@ -312,7 +322,7 @@ function ActivateWizard() {
                     setPlateCode("ULK-000001");
                     setError(null);
                   }}
-                  className="text-green-700 hover:text-green-800 underline font-medium"
+                  className="text-[#1A73E8] hover:text-[#1557B0] underline font-medium"
                 >
                   Demo Plate 1 (Aktif): ULK-000001
                 </button>
@@ -323,7 +333,7 @@ function ActivateWizard() {
                     setPlateCode("ULK-000002");
                     setError(null);
                   }}
-                  className="text-green-700 hover:text-green-800 underline font-medium"
+                  className="text-[#1A73E8] hover:text-[#1557B0] underline font-medium"
                 >
                   Demo Plate 2 (Baru): ULK-000002
                 </button>
@@ -332,7 +342,7 @@ function ActivateWizard() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-4 px-6 rounded-xl font-bold text-base text-white bg-green-600 hover:bg-green-700 shadow-md shadow-green-600/20 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+                className="w-full py-4 px-6 rounded-xl font-bold text-base text-white bg-[#1A73E8] hover:bg-[#1557B0] shadow-md shadow-blue-600/20 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
               >
                 {isLoading ? (
                   <span>Memeriksa kode...</span>
@@ -352,7 +362,7 @@ function ActivateWizard() {
           <div>
             <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
               <div>
-                <span className="text-xs font-semibold text-green-700 uppercase tracking-wider">
+                <span className="text-xs font-semibold text-[#1A73E8] uppercase tracking-wider">
                   Langkah 2 dari 3
                 </span>
                 <h2 className="text-xl font-bold text-gray-900 tracking-tight">
@@ -378,7 +388,7 @@ function ActivateWizard() {
                     value={businessName}
                     onChange={(e) => setBusinessName(e.target.value)}
                     placeholder="Contoh: Kopi Kenangan Senopati"
-                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 text-sm focus:border-green-500 focus:ring-2 focus:ring-green-100 outline-none"
+                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 text-sm focus:border-[#1A73E8] focus:ring-2 focus:ring-blue-100 outline-none"
                   />
                 </div>
               </div>
@@ -402,7 +412,7 @@ function ActivateWizard() {
                       setError(null);
                     }}
                     placeholder="https://g.page/r/.../review atau https://maps.app.goo.gl/..."
-                    className="flex-1 px-4 py-3 rounded-xl border border-gray-200 text-sm focus:border-green-500 focus:ring-2 focus:ring-green-100 outline-none font-mono text-xs"
+                    className="flex-1 px-4 py-3 rounded-xl border border-gray-200 text-sm focus:border-[#1A73E8] focus:ring-2 focus:ring-blue-100 outline-none font-mono text-xs"
                   />
                   <button
                     type="button"
@@ -441,7 +451,7 @@ function ActivateWizard() {
                   value={ownerEmail}
                   onChange={(e) => setOwnerEmail(e.target.value)}
                   placeholder="budi@bisnisanda.com"
-                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:border-green-500 focus:ring-2 focus:ring-green-100 outline-none"
+                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:border-[#1A73E8] focus:ring-2 focus:ring-blue-100 outline-none"
                 />
               </div>
 
@@ -464,7 +474,7 @@ function ActivateWizard() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="flex-1 py-3.5 px-6 rounded-xl font-bold text-sm text-white bg-green-600 hover:bg-green-700 shadow-md shadow-green-600/20 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+                  className="flex-1 py-3.5 px-6 rounded-xl font-bold text-sm text-white bg-[#1A73E8] hover:bg-[#1557B0] shadow-md shadow-blue-600/20 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
                 >
                   {isLoading ? (
                     <span>Menyimpan aktivasi...</span>
@@ -483,11 +493,11 @@ function ActivateWizard() {
         {/* ================= STEP 3: SUKSES AKTIVASI ================= */}
         {step === 3 && (
           <div className="text-center py-4">
-            <div className="w-16 h-16 rounded-2xl bg-green-100 text-green-700 flex items-center justify-center mx-auto mb-5 shadow-sm">
+            <div className="w-16 h-16 rounded-2xl bg-green-100 text-[#34A853] flex items-center justify-center mx-auto mb-5 shadow-sm">
               <CheckCircle2 className="w-9 h-9 stroke-[2.5]" />
             </div>
 
-            <span className="text-xs font-bold uppercase tracking-wider text-green-700 bg-green-50 border border-green-200 px-3 py-1 rounded-full">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#34A853] bg-green-50 border border-green-200 px-3 py-1 rounded-full">
               Plate Aktif & Siap Digunakan
             </span>
 
@@ -507,7 +517,7 @@ function ActivateWizard() {
 
               <div className="flex items-center justify-between pb-3 border-b border-gray-200">
                 <span className="text-xs text-gray-500 font-medium">Link Redirect Dinamis:</span>
-                <span className="text-xs font-mono font-bold text-green-700">
+                <span className="text-xs font-mono font-bold text-[#1A73E8]">
                   /r/{plateCode}
                 </span>
               </div>
@@ -529,7 +539,7 @@ function ActivateWizard() {
                 href={`/r/${plateCode}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 py-3.5 px-4 rounded-xl font-bold text-sm text-white bg-green-600 hover:bg-green-700 shadow-md shadow-green-600/20 active:scale-98 transition-all flex items-center justify-center gap-2"
+                className="flex-1 py-3.5 px-4 rounded-xl font-bold text-sm text-white bg-[#1A73E8] hover:bg-[#1557B0] shadow-md shadow-blue-600/20 active:scale-98 transition-all flex items-center justify-center gap-2"
               >
                 <Smartphone className="w-4 h-4" />
                 <span>Uji Coba Tap Sekarang (/r/{plateCode})</span>
@@ -555,7 +565,7 @@ function ActivateWizard() {
                   setGoogleReviewUrl("");
                   setIsTested(false);
                 }}
-                className="text-green-700 hover:underline font-semibold"
+                className="text-[#1A73E8] hover:underline font-semibold"
               >
                 Aktivasi plate lainnya
               </button>
