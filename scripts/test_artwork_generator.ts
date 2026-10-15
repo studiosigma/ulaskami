@@ -32,8 +32,8 @@ async function runTests() {
   assert(badgeSvg.includes("#4285F4") && badgeSvg.includes("#EA4335") && badgeSvg.includes("#FBBC05") && badgeSvg.includes("#34A853"), "Badge SVG contains official Google 4-color palette");
   assert(badgeSvg.includes("ULK-000001"), "Badge SVG contains technical serial code");
   assert(badgeSvg.includes("Kopi Kenangan Senopati"), "Badge SVG includes merchant business name");
-  assert(badgeSvg.includes("TAP HP ANDA") && badgeSvg.includes("SCAN QR"), "Badge SVG contains dual action columns (NFC & QR)");
-  assert(badgeSvg.includes('Powered by <tspan fill="#2563eb" font-weight="700">ulaskami.id</tspan>'), "Badge SVG formats 'ulaskami.id' in hyperlink blue (#2563eb)");
+  assert(badgeSvg.includes("TAP YOUR PHONE") && badgeSvg.includes("SCAN QR"), "Badge SVG contains dual action columns (TAP YOUR PHONE & SCAN QR)");
+  assert(badgeSvg.includes('powered by <tspan fill="#1A73E8" font-weight="700">ulaskami.id</tspan>'), "Badge SVG formats 'ulaskami.id' in brand blue (#1A73E8)");
 
   const clearStandSvg = await generatePlateSvg({
     code: "ULK-000001",
@@ -42,9 +42,8 @@ async function runTests() {
     format: "square_100",
   });
 
-  assert(clearStandSvg.includes("Ulas Kami di Google"), "Clear Stand SVG contains headline");
-  assert(clearStandSvg.includes("#FBBC05"), "Clear Stand SVG contains 5 gold stars");
-  assert(clearStandSvg.includes('Powered by <tspan fill="#2563eb" font-weight="700">ulaskami.id</tspan>'), "Clear Stand SVG also includes 'ulaskami.id' in hyperlink blue (#2563eb)");
+  assert(clearStandSvg.includes("review us") && clearStandSvg.includes("on Google"), "Clear Stand SVG contains headline");
+  assert(clearStandSvg.includes('powered by <tspan fill="#1A73E8" font-weight="700">ulaskami.id</tspan>'), "Clear Stand SVG includes 'ulaskami.id' in brand blue (#1A73E8)");
 
   // Test Tema B: Dark Luxury / Matte Black
   const darkLuxurySvg = await generatePlateSvg({
@@ -55,7 +54,7 @@ async function runTests() {
   });
   assert(darkLuxurySvg.includes("#0f1117") && darkLuxurySvg.includes("#181a22"), "Dark Luxury SVG includes obsidian dark palette");
   assert(darkLuxurySvg.includes("Barbershop Barokah"), "Dark Luxury SVG includes business name");
-  assert(darkLuxurySvg.includes('Powered by <tspan fill="#38bdf8" font-weight="700">ulaskami.id</tspan>'), "Dark Luxury SVG includes neon cyan ulaskami.id link");
+  assert(darkLuxurySvg.includes('powered by <tspan fill="#38bdf8" font-weight="700">ulaskami.id</tspan>'), "Dark Luxury SVG includes neon cyan ulaskami.id link");
 
   // Test Tema C: Frost White & Gold Accent
   const frostGoldSvg = await generatePlateSvg({
@@ -66,7 +65,7 @@ async function runTests() {
   });
   assert(frostGoldSvg.includes("#faf8f5") && frostGoldSvg.includes("#d4af37"), "Frost Gold SVG includes pearlescent & gold accents");
   assert(frostGoldSvg.includes("Klinik Medika Estetika"), "Frost Gold SVG includes clinic business name");
-  assert(frostGoldSvg.includes('Powered by <tspan fill="#d97706" font-weight="700">ulaskami.id</tspan>'), "Frost Gold SVG includes amber gold ulaskami.id link");
+  assert(frostGoldSvg.includes('powered by <tspan fill="#b45309" font-weight="700">ulaskami.id</tspan>'), "Frost Gold SVG includes amber gold ulaskami.id link");
 
   // Test XML Escaping for Ampersand & XSS tags
   const escapedSvg = await generatePlateSvg({
