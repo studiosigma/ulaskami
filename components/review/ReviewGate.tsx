@@ -36,6 +36,7 @@ const RATING_FEEDBACK = {
 export default function ReviewGate({ plate }: ReviewGateProps) {
   const [rating, setRating] = useState<number | null>(null);
   const [hoverRating, setHoverRating] = useState<number | null>(null);
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const [privateFeedback, setPrivateFeedback] = useState("");
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
@@ -49,6 +50,23 @@ export default function ReviewGate({ plate }: ReviewGateProps) {
   const isNegative = rating !== null && rating < minGoogleRating;
 
   const activeStarCount = hoverRating || rating || 0;
+
+  // Handler saat bintang diklik: Jika bintang 5 (atau positif), otomatis langsung redirect ke Google Maps
+  const handleSelectRating = (starIndex: number) => {
+    setRating(starIndex);
+
+    if (starIndex >= minGoogleRating && plate.googleReviewUrl) {
+      setIsRedirecting(true);
+      // Berikan jeda 500ms agar efek visual bintang menyala terlihat oleh pelanggan
+      setTimeout(() => {
+        if (typeof window !== "undefined") {
+          window.location.href = plate.googleReviewUrl;
+        }
+      }, 500);
+    } else {
+      setIsRedirecting(false);
+    }
+  };
 
   // WhatsApp link fallback untuk keluhan privat
   const targetWhatsapp = plate.feedbackWhatsapp || SITE_CONFIG.whatsappNumber;
@@ -137,7 +155,7 @@ export default function ReviewGate({ plate }: ReviewGateProps) {
                 <button
                   key={starIndex}
                   type="button"
-                  onClick={() => setRating(starIndex)}
+                  onClick={() => handleSelectRating(starIndex)}
                   onMouseEnter={() => setHoverRating(starIndex)}
                   onMouseLeave={() => setHoverRating(null)}
                   className="p-1 sm:p-2 rounded-xl transition-all transform hover:scale-115 active:scale-95 focus:outline-hidden cursor-pointer"
@@ -174,13 +192,25 @@ export default function ReviewGate({ plate }: ReviewGateProps) {
         {/* Action Panel Based on Rating */}
         {isPositive && (
           <div className="mt-2 p-5 bg-gradient-to-br from-blue-50/80 via-emerald-50/40 to-white border border-blue-100 rounded-2xl animate-in fade-in slide-in-from-bottom-3 duration-300">
-            <div className="flex items-center gap-2 text-[#1A73E8] font-bold mb-1 text-sm sm:text-base">
-              <ThumbsUp className="w-5 h-5 text-[#34A853] shrink-0" />
-              <span>Terima kasih banyak!</span>
+            <div className="flex items-center justify-between mb-1">
+              <div className="flex items-center gap-2 text-[#1A73E8] font-bold text-sm sm:text-base">
+                <ThumbsUp className="w-5 h-5 text-[#34A853] shrink-0" />
+                <span>Terima kasih banyak!</span>
+              </div>
+              {isRedirecting && (
+                <span className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-700 bg-emerald-100/80 px-2.5 py-0.5 rounded-full animate-pulse">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-ping" />
+                  Mengalihkan...
+                </span>
+              )}
             </div>
+
             <p className="text-xs sm:text-sm text-slate-600 mb-4 leading-relaxed">
-              Dukungan ulasan bintang 5 Anda di Google Maps sangat berharga bagi kelangsungan usaha kami.
+              {isRedirecting
+                ? "Dukungan Anda sangat berharga! Sedang membuka halaman ulasan Google Maps..."
+                : "Dukungan ulasan bintang 5 Anda di Google Maps sangat berharga bagi kelangsungan usaha kami."}
             </p>
+
             <a
               href={plate.googleReviewUrl}
               target="_blank"
@@ -194,7 +224,9 @@ export default function ReviewGate({ plate }: ReviewGateProps) {
                 height={24}
                 className="w-4.5 h-auto object-contain shrink-0"
               />
-              <span>Tulis Ulasan di Google Maps</span>
+              <span>
+                {isRedirecting ? "Membuka Google Maps..." : "Tulis Ulasan di Google Maps"}
+              </span>
               <ExternalLink className="w-4 h-4 ml-0.5" />
             </a>
             <p className="text-[11px] text-center text-slate-400 mt-2">
