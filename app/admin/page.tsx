@@ -17,12 +17,14 @@ import {
   CheckCircle2,
   Clock,
   Database,
+  Radio,
 } from "lucide-react";
 import { Navbar } from "@/components/landing/Navbar";
 import { Footer } from "@/components/landing/Footer";
 import { Plate, SessionUser } from "@/lib/types";
 import StandArtworkModal from "@/components/print/StandArtworkModal";
 import BatchGeneratorModal from "@/components/admin/BatchGeneratorModal";
+import NfcProgrammingModal from "@/components/admin/NfcProgrammingModal";
 
 interface AdminStats {
   totalPlates: number;
@@ -47,6 +49,7 @@ export default function SuperAdminPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "unactivated">("all");
   const [isBatchModalOpen, setIsBatchModalOpen] = useState(false);
+  const [isNfcModalOpen, setIsNfcModalOpen] = useState(false);
   const [artworkPlate, setArtworkPlate] = useState<Plate | null>(null);
 
   const fetchAdminData = useCallback(async () => {
@@ -190,6 +193,15 @@ export default function SuperAdminPage() {
               >
                 <Box className="w-4 h-4" />
                 <span>+ Buat Batch Plate Baru</span>
+              </button>
+
+              <button
+                onClick={() => setIsNfcModalOpen(true)}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-800 bg-white hover:bg-slate-50 border border-gray-200 hover:border-blue-200 transition-colors shadow-2xs cursor-pointer"
+                title="Buka SOP dan Tool Pemrograman Chip NFC"
+              >
+                <Radio className="w-4 h-4 text-[#1A73E8]" />
+                <span>SOP &amp; Pemrograman NFC</span>
               </button>
 
               <Link
@@ -516,6 +528,15 @@ export default function SuperAdminPage() {
           fetchAdminData();
         }}
       />
+
+      {/* NFC Programming SOP & Tool Modal */}
+      {isNfcModalOpen && (
+        <NfcProgrammingModal
+          isOpen={isNfcModalOpen}
+          onClose={() => setIsNfcModalOpen(false)}
+          plates={plates}
+        />
+      )}
 
       <Footer />
     </div>

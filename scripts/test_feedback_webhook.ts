@@ -11,7 +11,6 @@ import {
   createCustomerResolutionWhatsappLink,
   normalizeWhatsappNumber,
 } from "../lib/utils/whatsapp";
-import { testWebhookPing } from "../lib/utils/webhook";
 
 async function runTests() {
   console.log("=== Running Feedback & Webhook Integration Tests ===\n");
