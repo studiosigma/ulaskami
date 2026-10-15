@@ -104,6 +104,11 @@ export function Footer() {
                   Masuk Dashboard
                 </Link>
               </li>
+              <li>
+                <Link href="/admin" className="hover:text-[#4285F4] transition-colors">
+                  Konsol Admin
+                </Link>
+              </li>
             </ul>
           </div>
 

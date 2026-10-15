@@ -11,6 +11,7 @@ import { Footer } from "@/components/landing/Footer";
 function LoginForm() {
   const searchParams = useSearchParams();
   const codeParam = searchParams.get("code") || "";
+  const redirectParam = searchParams.get("redirect") || "";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -37,7 +38,13 @@ function LoginForm() {
         return;
       }
 
-      router.push(codeParam ? `/activate?code=${encodeURIComponent(codeParam)}` : "/dashboard");
+      if (codeParam) {
+        router.push(`/activate?code=${encodeURIComponent(codeParam)}`);
+      } else if (redirectParam && redirectParam.startsWith("/")) {
+        router.push(redirectParam);
+      } else {
+        router.push("/dashboard");
+      }
     } catch {
       setIsLoading(false);
       setError("Terjadi gangguan jaringan. Silakan coba lagi.");
