@@ -229,11 +229,9 @@ export default function NfcProgrammingModal({
                     className="w-full max-w-sm px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm font-mono font-bold text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                   >
                     {plates.map((p) => (
-                      <tr key={p.code}>
-                        <option value={p.code}>
-                          {p.code} {testedPlates[p.code] ? "✓ (QC Passed)" : "• (Belum QC)"}
-                        </option>
-                      </tr>
+                      <option key={p.code} value={p.code}>
+                        {p.code} {testedPlates[p.code] ? "✓ (QC Passed)" : "• (Belum QC)"}
+                      </option>
                     ))}
                   </select>
                 </div>

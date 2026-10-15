@@ -32,7 +32,8 @@ export async function GET(
       includeCropMarks,
     });
 
-    const isDownload = searchParams.get("download") === "true";
+    const isDownload =
+      searchParams.get("download") === "true" || searchParams.get("download") === "1";
     const filename = `${code}_${style}_${format}.svg`;
 
     const headers: Record<string, string> = {
