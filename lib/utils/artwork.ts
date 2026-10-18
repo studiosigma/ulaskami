@@ -127,7 +127,7 @@ export async function generatePlateSvg(options: GenerateArtworkOptions): Promise
 
   <!-- Unique Vector QR Barcode for this specific plate -->
   <g transform="translate(${qrX}, ${qrY}) scale(${qrScale})">
-    <path d="${qrPath}" fill="#000000" shape-rendering="crispEdges" />
+    <path d="${qrPath}" stroke="#000000" stroke-width="1" fill="none" shape-rendering="crispEdges" />
   </g>
 
   <!-- Unique Serial Code for this specific plate -->
@@ -184,7 +184,7 @@ export async function generatePlateSvg(options: GenerateArtworkOptions): Promise
     <text x="0" y="0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10.5" font-weight="800" fill="#202124">SCAN QR</text>
     <rect x="-44" y="12" width="88" height="88" rx="8" fill="#ffffff" stroke="#d6d6d6" stroke-width="1" />
     <g transform="translate(-40, 16) scale(${80 / qrSize})">
-      <path d="${qrPath}" fill="#000000" shape-rendering="crispEdges" />
+      <path d="${qrPath}" stroke="#000000" stroke-width="1" fill="none" shape-rendering="crispEdges" />
     </g>
     <text x="0" y="111" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, monospace, sans-serif" font-size="9" font-weight="700" fill="#202124">${cleanCode}</text>
   </g>
