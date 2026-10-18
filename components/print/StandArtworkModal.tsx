@@ -18,6 +18,8 @@ export default function StandArtworkModal({ plate, isOpen, onClose }: StandArtwo
   const currentKey = plate ? `${plate.code}_${includeCropMarks}` : "";
   const isLoading = Boolean(isOpen && plate && loadedKey !== currentKey);
 
+  const [fetchError, setFetchError] = useState<string | null>(null);
+
   useEffect(() => {
     if (!isOpen || !plate) return;
 
@@ -28,15 +30,25 @@ export default function StandArtworkModal({ plate, isOpen, onClose }: StandArtwo
     });
 
     fetch(`/api/plates/${plate.code}/artwork?${query.toString()}`)
-      .then((res) => res.text())
+      .then(async (res) => {
+        if (!res.ok) {
+          const errMsg = await res.text();
+          throw new Error(errMsg || `Gagal memuat template (${res.status})`);
+        }
+        return res.text();
+      })
       .then((svg) => {
         if (!ignore) {
+          setFetchError(null);
           setSvgContent(svg);
           setLoadedKey(`${plate.code}_${includeCropMarks}`);
         }
       })
       .catch((err) => {
-        console.error("Gagal memuat preview SVG:", err);
+        if (!ignore) {
+          console.error("Gagal memuat preview SVG:", err);
+          setFetchError(err instanceof Error ? err.message : "Gagal memuat preview desain SVG");
+        }
       });
 
     return () => {
@@ -135,6 +147,14 @@ export default function StandArtworkModal({ plate, isOpen, onClose }: StandArtwo
               <div className="py-24 text-xs text-slate-400 animate-pulse flex flex-col items-center gap-2">
                 <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
                 <span>Menyiapkan barcode matriks presisi...</span>
+              </div>
+            ) : fetchError ? (
+              <div className="py-20 text-xs text-red-600 flex flex-col items-center gap-2 text-center px-4">
+                <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600 font-bold">
+                  !
+                </div>
+                <span className="font-semibold">{fetchError}</span>
+                <span className="text-slate-400">Silakan periksa koneksi atau coba muat ulang.</span>
               </div>
             ) : svgContent ? (
               <div

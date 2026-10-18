@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getCurrentSession } from "@/lib/auth";
+import { getCurrentSession, isUserAdmin } from "@/lib/auth";
 import { getPlateByCode, getPlateAnalytics } from "@/lib/db/plates";
 
 export async function GET(
@@ -23,8 +23,11 @@ export async function GET(
       return NextResponse.json({ error: "Plate tidak ditemukan." }, { status: 404 });
     }
 
-    // Verifikasi kepemilikan plate
-    if (plate.ownerEmail && plate.ownerEmail.toLowerCase() !== session.email.toLowerCase()) {
+    // Verifikasi kepemilikan plate (hanya pemilik atau Super Admin)
+    const isAdmin = isUserAdmin(session.email);
+    const isOwner = Boolean(plate.ownerEmail && plate.ownerEmail.toLowerCase() === session.email.toLowerCase());
+
+    if (!isOwner && !isAdmin) {
       return NextResponse.json(
         { error: "Anda tidak memiliki izin untuk melihat analitik plate ini." },
         { status: 403 }

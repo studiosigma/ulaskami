@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getCurrentSession } from "@/lib/auth";
+import { getCurrentSession, isUserAdmin } from "@/lib/auth";
 import { generatePlateCodes, getHighestPlateNumber, registerNewPlateBatch } from "@/lib/db/seed";
 
 export async function POST(request: NextRequest) {
@@ -12,18 +12,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const adminEmails = (process.env.ADMIN_EMAILS || "")
-      .split(",")
-      .map((e) => e.trim().toLowerCase())
-      .filter(Boolean);
-
-    const isAuthorized =
-      adminEmails.length > 0
-        ? adminEmails.includes(session.email.toLowerCase())
-        : session.email.toLowerCase() === "budi@kopikenangan.id" ||
-          process.env.NODE_ENV !== "production";
-
-    if (!isAuthorized) {
+    if (!isUserAdmin(session.email)) {
       return NextResponse.json(
         { error: "Akses ditolak. Fitur Batch Generator hanya dapat diakses oleh administrator resmi." },
         { status: 403 }

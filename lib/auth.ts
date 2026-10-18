@@ -148,6 +148,12 @@ export function isUserAdmin(email?: string | null): boolean {
   if (adminEmails.length > 0) {
     return adminEmails.includes(cleanEmail);
   }
-  // Default fallback untuk akun demo / developer
-  return cleanEmail === "budi@kopikenangan.id" || process.env.NODE_ENV !== "production";
+
+  // Di lingkungan produksi, JANGAN PERNAH gunakan fallback akun demo
+  if (process.env.NODE_ENV === "production") {
+    return false;
+  }
+
+  // Fallback hanya untuk pengujian lokal / development
+  return cleanEmail === "budi@kopikenangan.id";
 }

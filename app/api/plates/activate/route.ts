@@ -28,18 +28,24 @@ export async function POST(request: NextRequest) {
     const existing = await getPlateByCode(cleanCode);
     const effectiveEmail = session ? session.email : ownerEmail ? ownerEmail.trim().toLowerCase() : undefined;
 
-    // Proteksi Anti-Hijacking: jika plate sudah aktif dan memiliki pemilik berbeda, tolak
-    if (
-      existing &&
-      existing.isActive &&
-      existing.ownerEmail &&
-      effectiveEmail &&
-      existing.ownerEmail.toLowerCase() !== effectiveEmail.toLowerCase()
-    ) {
-      return NextResponse.json(
-        { error: "Plate ini sudah aktif dan terdaftar pada akun merchant lain." },
-        { status: 400 }
-      );
+    // Proteksi Anti-Hijacking: jika plate sudah aktif, cegah penimpaan oleh anonim atau akun lain
+    if (existing && existing.isActive) {
+      if (!effectiveEmail) {
+        return NextResponse.json(
+          { error: "Plate ini sudah aktif. Silakan masuk (login) terlebih dahulu menggunakan akun merchant pemilik untuk mengubah konfigurasi." },
+          { status: 403 }
+        );
+      }
+
+      if (
+        existing.ownerEmail &&
+        existing.ownerEmail.toLowerCase() !== effectiveEmail.toLowerCase()
+      ) {
+        return NextResponse.json(
+          { error: "Plate ini sudah aktif dan terdaftar pada akun merchant lain." },
+          { status: 403 }
+        );
+      }
     }
 
     const urlValidation = validateGoogleReviewUrl(googleReviewUrl);

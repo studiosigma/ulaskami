@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCurrentSession } from "@/lib/auth";
-import { testWebhookPing } from "@/lib/utils/webhook";
+import { testWebhookPing, validateWebhookUrl } from "@/lib/utils/webhook";
 
 /**
  * POST /api/webhook/test
@@ -24,9 +24,10 @@ export async function POST(req: NextRequest) {
     }
 
     const cleanUrl = webhookUrl.trim();
-    if (!cleanUrl.startsWith("http://") && !cleanUrl.startsWith("https://")) {
+    const validation = validateWebhookUrl(cleanUrl);
+    if (!validation.isValid) {
       return NextResponse.json(
-        { error: "URL Webhook harus diawali dengan http:// atau https://" },
+        { error: validation.error || "URL Webhook tidak valid atau dilarang." },
         { status: 400 }
       );
     }
@@ -37,7 +38,7 @@ export async function POST(req: NextRequest) {
       success: pingResult.success,
       statusCode: pingResult.statusCode,
       error: pingResult.error,
-      responseBody: pingResult.responseBody,
+      responseBody: pingResult.success ? pingResult.responseBody : undefined,
     });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Gagal menguji webhook";

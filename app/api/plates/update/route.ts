@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { updatePlateUrl, getPlateByCode } from "@/lib/db/plates";
 import { validateGoogleReviewUrl } from "@/lib/utils/url";
-import { getCurrentSession } from "@/lib/auth";
+import { validateWebhookUrl } from "@/lib/utils/webhook";
+import { getCurrentSession, isUserAdmin } from "@/lib/auth";
 
 export async function POST(request: NextRequest) {
   try {
@@ -31,10 +32,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verifikasi kepemilikan plate
-    if (plate.ownerEmail && plate.ownerEmail.toLowerCase() !== user.email.toLowerCase()) {
+    // Verifikasi kepemilikan plate (hanya pemilik atau Super Admin)
+    const isAdmin = isUserAdmin(user.email);
+    const isOwner = Boolean(plate.ownerEmail && plate.ownerEmail.toLowerCase() === user.email.toLowerCase());
+
+    if (!isOwner && !isAdmin) {
       return NextResponse.json(
-        { error: "Anda tidak memiliki hak akses untuk mengubah plate ini." },
+        { error: "Anda tidak memiliki hak akses untuk mengubah konfigurasi plate ini." },
         { status: 403 }
       );
     }
@@ -57,7 +61,18 @@ export async function POST(request: NextRequest) {
       cleanWhatsapp = raw;
     }
 
-    const cleanWebhook = webhookUrl !== undefined ? String(webhookUrl).trim() : undefined;
+    let cleanWebhook = webhookUrl !== undefined ? String(webhookUrl).trim() : undefined;
+    if (cleanWebhook) {
+      const webhookVal = validateWebhookUrl(cleanWebhook);
+      if (!webhookVal.isValid) {
+        return NextResponse.json(
+          { error: webhookVal.error || "URL Webhook tidak valid atau dilarang." },
+          { status: 400 }
+        );
+      }
+    } else if (webhookUrl === "") {
+      cleanWebhook = "";
+    }
 
     const updated = await updatePlateUrl({
       code: code.trim(),

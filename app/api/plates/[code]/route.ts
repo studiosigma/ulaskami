@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getPlateByCode } from "@/lib/db/plates";
+import { getCurrentSession, isUserAdmin } from "@/lib/auth";
 
 export async function GET(
   request: NextRequest,
@@ -16,5 +17,25 @@ export async function GET(
     );
   }
 
-  return NextResponse.json({ plate });
+  const session = await getCurrentSession();
+  const isOwnerOrAdmin =
+    session &&
+    ((plate.ownerEmail && plate.ownerEmail.toLowerCase() === session.email.toLowerCase()) ||
+      isUserAdmin(session.email));
+
+  if (isOwnerOrAdmin) {
+    return NextResponse.json({ plate });
+  }
+
+  // Sanitasi data untuk panggilan publik (misal: onboarding form di /activate)
+  const sanitizedPlate = {
+    code: plate.code,
+    businessName: plate.businessName,
+    googleReviewUrl: plate.googleReviewUrl,
+    isActive: plate.isActive,
+    routingMode: plate.routingMode,
+    minGoogleRating: plate.minGoogleRating,
+  };
+
+  return NextResponse.json({ plate: sanitizedPlate });
 }

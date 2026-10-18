@@ -178,20 +178,22 @@ export async function initDatabaseSchema(): Promise<void> {
         }
       }
 
-      // 6. Periksa dan seed akun merchant demo
-      const merchantCountRes = await query<{ count: string }>(`SELECT COUNT(*) FROM merchants;`);
-      const merchantCount = merchantCountRes && merchantCountRes.rows[0] ? parseInt(merchantCountRes.rows[0].count, 10) : 0;
+      // 6. Periksa dan seed akun merchant demo (Hanya untuk local dev / staging)
+      if (process.env.NODE_ENV !== "production") {
+        const merchantCountRes = await query<{ count: string }>(`SELECT COUNT(*) FROM merchants;`);
+        const merchantCount = merchantCountRes && merchantCountRes.rows[0] ? parseInt(merchantCountRes.rows[0].count, 10) : 0;
 
-      if (merchantCount === 0) {
-        const { hash, salt } = hashPassword(INITIAL_DEMO_MERCHANT.passwordPlain);
-        await query(
-          `
-          INSERT INTO merchants (id, name, email, password_hash, password_salt, created_at, updated_at)
-          VALUES ($1, $2, $3, $4, $5, NOW(), NOW())
-          ON CONFLICT (email) DO NOTHING;
-        `,
-          [INITIAL_DEMO_MERCHANT.id, INITIAL_DEMO_MERCHANT.name, INITIAL_DEMO_MERCHANT.email, hash, salt]
-        );
+        if (merchantCount === 0) {
+          const { hash, salt } = hashPassword(INITIAL_DEMO_MERCHANT.passwordPlain);
+          await query(
+            `
+            INSERT INTO merchants (id, name, email, password_hash, password_salt, created_at, updated_at)
+            VALUES ($1, $2, $3, $4, $5, NOW(), NOW())
+            ON CONFLICT (email) DO NOTHING;
+          `,
+            [INITIAL_DEMO_MERCHANT.id, INITIAL_DEMO_MERCHANT.name, INITIAL_DEMO_MERCHANT.email, hash, salt]
+          );
+        }
       }
     } catch (err) {
       console.error("[PostgreSQL Schema Initialization Error]:", err);

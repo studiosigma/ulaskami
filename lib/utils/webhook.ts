@@ -8,6 +8,75 @@ export interface WebhookDispatchResult {
 }
 
 /**
+ * Memvalidasi URL Webhook untuk mencegah Server-Side Request Forgery (SSRF)
+ * ke host lokal, cloud instance metadata, maupun IP private jaringan internal.
+ */
+export function validateWebhookUrl(rawUrl: string): { isValid: boolean; error?: string } {
+  const clean = (rawUrl || "").trim();
+  if (!clean) {
+    return { isValid: false, error: "URL webhook tidak boleh kosong." };
+  }
+
+  let parsed: URL;
+  try {
+    parsed = new URL(clean);
+  } catch {
+    return { isValid: false, error: "Format URL webhook tidak valid." };
+  }
+
+  // Protokol harus https:// di lingkungan produksi
+  if (process.env.NODE_ENV === "production") {
+    if (parsed.protocol !== "https:") {
+      return { isValid: false, error: "URL Webhook produksi wajib menggunakan protokol aman HTTPS (https://)." };
+    }
+  } else {
+    if (parsed.protocol !== "https:" && parsed.protocol !== "http:") {
+      return { isValid: false, error: "Protokol webhook harus http atau https." };
+    }
+  }
+
+  const hostname = parsed.hostname.toLowerCase();
+
+  // Cegah hostname lokal / loopback
+  if (
+    hostname === "localhost" ||
+    hostname === "127.0.0.1" ||
+    hostname === "0.0.0.0" ||
+    hostname === "::1" ||
+    hostname.endsWith(".localhost") ||
+    hostname.endsWith(".local") ||
+    hostname.endsWith(".internal")
+  ) {
+    return { isValid: false, error: "URL webhook tidak boleh mengarah ke server lokal (localhost/internal)." };
+  }
+
+  // Cegah Cloud Instance Metadata Service (AWS/GCP/Azure/OpenStack)
+  if (hostname.startsWith("169.254.")) {
+    return { isValid: false, error: "Akses ke alamat metadata cloud instance dilarang." };
+  }
+
+  // Cegah IP privat RFC 1918 (10.x.x.x, 192.168.x.x, 172.16-31.x.x)
+  const ipv4Regex = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
+  const ipMatch = hostname.match(ipv4Regex);
+  if (ipMatch) {
+    const p1 = parseInt(ipMatch[1], 10);
+    const p2 = parseInt(ipMatch[2], 10);
+
+    if (
+      p1 === 10 || // 10.0.0.0/8
+      (p1 === 172 && p2 >= 16 && p2 <= 31) || // 172.16.0.0/12
+      (p1 === 192 && p2 === 168) || // 192.168.0.0/16
+      p1 === 127 || // 127.0.0.0/8
+      p1 === 0 // 0.0.0.0/8
+    ) {
+      return { isValid: false, error: "URL webhook tidak boleh mengarah ke rentang IP privat intranet." };
+    }
+  }
+
+  return { isValid: true };
+}
+
+/**
  * Dispatch notifikasi webhook ke URL tujuan (Mendukung Discord, Slack, n8n, Zapier, Make, & Custom CRM)
  */
 export async function dispatchFeedbackWebhook(
@@ -15,8 +84,9 @@ export async function dispatchFeedbackWebhook(
   feedback: FeedbackRecord
 ): Promise<WebhookDispatchResult> {
   const cleanUrl = webhookUrl.trim();
-  if (!cleanUrl || !cleanUrl.startsWith("http")) {
-    return { success: false, error: "Invalid webhook URL format" };
+  const validation = validateWebhookUrl(cleanUrl);
+  if (!validation.isValid) {
+    return { success: false, error: validation.error || "Format URL webhook tidak valid." };
   }
 
   const isDiscord = cleanUrl.includes("discord.com/api/webhooks");

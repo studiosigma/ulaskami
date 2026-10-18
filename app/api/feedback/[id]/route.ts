@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { updateFeedbackStatus } from "@/lib/db/plates";
-import { getCurrentSession } from "@/lib/auth";
+import { getCurrentSession, isUserAdmin } from "@/lib/auth";
 import { FeedbackStatus } from "@/lib/types";
 
 export async function PATCH(
@@ -25,10 +25,11 @@ export async function PATCH(
       );
     }
 
-    const updated = await updateFeedbackStatus(id, status);
+    const isAdmin = isUserAdmin(session.email);
+    const updated = await updateFeedbackStatus(id, status, session.email, isAdmin);
     if (!updated) {
       return NextResponse.json(
-        { error: "Feedback tidak ditemukan." },
+        { error: "Feedback tidak ditemukan atau Anda tidak memiliki izin untuk mengubahnya." },
         { status: 404 }
       );
     }

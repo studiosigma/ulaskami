@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getCurrentSession } from "@/lib/auth";
+import { getCurrentSession, isUserAdmin } from "@/lib/auth";
 import { getPlateByCode, getPlateScanLogs } from "@/lib/db/plates";
 
 export async function GET(
@@ -20,8 +20,12 @@ export async function GET(
       return new NextResponse("Plate tidak ditemukan", { status: 404 });
     }
 
-    if (plate.ownerEmail && plate.ownerEmail.toLowerCase() !== session.email.toLowerCase()) {
-      return new NextResponse("Forbidden", { status: 403 });
+    // Verifikasi kepemilikan plate (hanya pemilik atau Super Admin)
+    const isAdmin = isUserAdmin(session.email);
+    const isOwner = Boolean(plate.ownerEmail && plate.ownerEmail.toLowerCase() === session.email.toLowerCase());
+
+    if (!isOwner && !isAdmin) {
+      return new NextResponse("Forbidden: Anda tidak memiliki akses untuk mengekspor data plate ini.", { status: 403 });
     }
 
     const logs = await getPlateScanLogs(code);

@@ -378,14 +378,14 @@ export async function activatePlate(
 
       if (existing && existing.rows.length > 0) {
         const existingPlate = existing.rows[0];
-        // Proteksi Anti-Hijacking: jika plate sudah aktif dan memiliki pemilik berbeda, tolak
-        if (
-          existingPlate.is_active &&
-          existingPlate.owner_email &&
-          ownerEmail &&
-          existingPlate.owner_email.toLowerCase() !== ownerEmail
-        ) {
-          throw new Error("Plate ini sudah aktif dan dimiliki oleh akun merchant lain.");
+        // Proteksi Anti-Hijacking: jika plate sudah aktif, cegah penimpaan oleh anonim atau merchant lain
+        if (existingPlate.is_active) {
+          if (!ownerEmail) {
+            throw new Error("Plate ini sudah aktif. Masuk ke akun merchant pemilik untuk mengubah konfigurasi.");
+          }
+          if (existingPlate.owner_email && existingPlate.owner_email.toLowerCase() !== ownerEmail) {
+            throw new Error("Plate ini sudah aktif dan dimiliki oleh akun merchant lain.");
+          }
         }
 
         const updateRes = await query<PlateDbRow>(
@@ -420,8 +420,13 @@ export async function activatePlate(
   const now = new Date().toISOString();
   let plate = store[code];
 
-  if (plate && plate.isActive && plate.ownerEmail && ownerEmail && plate.ownerEmail.toLowerCase() !== ownerEmail) {
-    throw new Error("Plate ini sudah aktif dan dimiliki oleh akun merchant lain.");
+  if (plate && plate.isActive) {
+    if (!ownerEmail) {
+      throw new Error("Plate ini sudah aktif. Masuk ke akun merchant pemilik untuk mengubah konfigurasi.");
+    }
+    if (plate.ownerEmail && plate.ownerEmail.toLowerCase() !== ownerEmail) {
+      throw new Error("Plate ini sudah aktif dan dimiliki oleh akun merchant lain.");
+    }
   }
 
   if (!plate) {
@@ -1002,24 +1007,42 @@ export async function getFeedbacksByOwner(ownerEmail: string): Promise<FeedbackR
 
 /**
  * Memperbarui status feedback (unread / resolved / archived)
+ * Dilengkapi verifikasi kepemilikan merchant untuk mencegah celah BOLA/IDOR.
  */
 export async function updateFeedbackStatus(
   id: string,
-  status: FeedbackStatus
+  status: FeedbackStatus,
+  userEmail?: string,
+  isAdmin?: boolean
 ): Promise<FeedbackRecord | null> {
   const cleanId = id.trim();
   if (!cleanId) return null;
+  const cleanEmail = (userEmail || "").trim().toLowerCase();
 
   if (isDatabaseConfigured()) {
     try {
       await initDatabaseSchema();
-      const res = await query<FeedbackDbRow>(
-        `UPDATE feedbacks
-         SET status = $1
-         WHERE id = $2
-         RETURNING *;`,
-        [status, cleanId]
-      );
+      let res;
+      if (isAdmin || !cleanEmail) {
+        res = await query<FeedbackDbRow>(
+          `UPDATE feedbacks
+           SET status = $1
+           WHERE id = $2
+           RETURNING *;`,
+          [status, cleanId]
+        );
+      } else {
+        res = await query<FeedbackDbRow>(
+          `UPDATE feedbacks
+           SET status = $1
+           WHERE id = $2
+             AND plate_code IN (
+               SELECT code FROM plates WHERE LOWER(owner_email) = $3
+             )
+           RETURNING *;`,
+          [status, cleanId, cleanEmail]
+        );
+      }
       if (res && res.rows.length > 0) {
         return mapRowToFeedback(res.rows[0]);
       }
@@ -1032,6 +1055,16 @@ export async function updateFeedbackStatus(
   const feedbacks = getFeedbackStore();
   const target = feedbacks.find((f) => f.id === cleanId);
   if (!target) return null;
+
+  // Verifikasi kepemilikan di memory fallback
+  if (!isAdmin && cleanEmail) {
+    const store = getMemoryStore();
+    const plate = store[target.plateCode];
+    if (!plate || !plate.ownerEmail || plate.ownerEmail.toLowerCase() !== cleanEmail) {
+      return null;
+    }
+  }
+
   target.status = status;
   return target;
 }
