@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { X, Download, Printer, Sparkles, CheckCircle2, ShieldCheck, QrCode } from "lucide-react";
+import { X, Download, Printer, Sparkles, CheckCircle2, ShieldCheck, QrCode, Store, Square } from "lucide-react";
 import { Plate } from "@/lib/types";
+import { ArtworkFormat } from "@/lib/utils/artwork";
 
 interface StandArtworkModalProps {
   plate: Plate | null;
@@ -11,11 +12,12 @@ interface StandArtworkModalProps {
 }
 
 export default function StandArtworkModal({ plate, isOpen, onClose }: StandArtworkModalProps) {
+  const [selectedFormat, setSelectedFormat] = useState<ArtworkFormat>("tent_a6");
   const [includeCropMarks, setIncludeCropMarks] = useState(false);
   const [svgContent, setSvgContent] = useState<string>("");
   const [loadedKey, setLoadedKey] = useState<string>("");
 
-  const currentKey = plate ? `${plate.code}_${includeCropMarks}` : "";
+  const currentKey = plate ? `${plate.code}_${selectedFormat}_${includeCropMarks}` : "";
   const isLoading = Boolean(isOpen && plate && loadedKey !== currentKey);
 
   const [fetchError, setFetchError] = useState<string | null>(null);
@@ -26,6 +28,7 @@ export default function StandArtworkModal({ plate, isOpen, onClose }: StandArtwo
     let ignore = false;
     const query = new URLSearchParams({
       style: "google_color_badge",
+      format: selectedFormat,
       cropMarks: includeCropMarks ? "true" : "false",
     });
 
@@ -41,7 +44,7 @@ export default function StandArtworkModal({ plate, isOpen, onClose }: StandArtwo
         if (!ignore) {
           setFetchError(null);
           setSvgContent(svg);
-          setLoadedKey(`${plate.code}_${includeCropMarks}`);
+          setLoadedKey(`${plate.code}_${selectedFormat}_${includeCropMarks}`);
         }
       })
       .catch((err) => {
@@ -54,25 +57,28 @@ export default function StandArtworkModal({ plate, isOpen, onClose }: StandArtwo
     return () => {
       ignore = true;
     };
-  }, [isOpen, plate, includeCropMarks]);
+  }, [isOpen, plate, selectedFormat, includeCropMarks]);
 
   if (!isOpen || !plate) return null;
 
-  const downloadUrl = `/api/plates/${plate.code}/artwork?style=google_color_badge&cropMarks=${includeCropMarks}&download=true`;
+  const downloadUrl = `/api/plates/${plate.code}/artwork?style=google_color_badge&format=${selectedFormat}&cropMarks=${includeCropMarks}&download=true`;
 
   const handlePrint = () => {
     const printWindow = window.open("", "_blank");
     if (!printWindow) return;
 
+    const pageSize = selectedFormat === "tent_a6" ? "105mm 148mm" : "100mm 100mm";
+    const modelTitle = selectedFormat === "tent_a6" ? "Stand Meja Kasir Model L" : "Tempel Kaca Etalase";
+
     printWindow.document.write(`
       <!DOCTYPE html>
       <html>
         <head>
-          <title>Cetak Plakat Akrilik - ${plate.code}</title>
+          <title>Cetak Plakat Akrilik - ${plate.code} - ${modelTitle}</title>
           <style>
             @page {
               margin: 0;
-              size: auto;
+              size: ${pageSize};
             }
             body {
               margin: 0;
@@ -134,13 +140,48 @@ export default function StandArtworkModal({ plate, isOpen, onClose }: StandArtwo
           </button>
         </div>
 
+        {/* Model Selector Bar */}
+        <div className="px-6 py-2.5 bg-slate-100/70 border-b border-slate-200/80 flex flex-wrap items-center justify-between gap-2">
+          <span className="text-xs font-semibold text-slate-600">Pilih Model Fisik Plakat:</span>
+          <div className="flex items-center bg-white p-1 rounded-xl border border-slate-200/90 shadow-2xs gap-1">
+            <button
+              type="button"
+              onClick={() => setSelectedFormat("tent_a6")}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                selectedFormat === "tent_a6"
+                  ? "bg-[#1A73E8] text-white shadow-xs"
+                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+              }`}
+            >
+              <Store className="w-3.5 h-3.5" />
+              <span>Stand Meja Kasir (L-Stand A6)</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedFormat("square_100")}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                selectedFormat === "square_100"
+                  ? "bg-[#1A73E8] text-white shadow-xs"
+                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+              }`}
+            >
+              <Square className="w-3.5 h-3.5" />
+              <span>Tempel Kaca (Kotak 1:1)</span>
+            </button>
+          </div>
+        </div>
+
         {/* Content Body */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left Column: Visual Preview */}
           <div className="lg:col-span-7 flex flex-col items-center justify-center bg-slate-100/80 rounded-2xl p-4 sm:p-6 border border-slate-200/70 min-h-[380px]">
             <div className="text-xs font-semibold text-slate-500 mb-2 flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-[#1A73E8]" />
-              <span>Pratinjau Hasil Cetak Fisik Master (1024 x 1024 px)</span>
+              <span>
+                {selectedFormat === "tent_a6"
+                  ? "Pratinjau Master Stand Meja Kasir (10.5 × 14.8 cm)"
+                  : "Pratinjau Master Tempel Kaca (1024 × 1024 px)"}
+              </span>
             </div>
 
             {isLoading ? (
@@ -158,7 +199,9 @@ export default function StandArtworkModal({ plate, isOpen, onClose }: StandArtwo
               </div>
             ) : svgContent ? (
               <div
-                className="w-full max-w-[340px] aspect-square rounded-2xl shadow-xl bg-white overflow-hidden p-1.5 transition-transform transform hover:scale-[1.02]"
+                className={`w-full ${
+                  selectedFormat === "tent_a6" ? "max-w-[270px] aspect-[800/1130]" : "max-w-[320px] aspect-square"
+                } rounded-2xl shadow-xl bg-white overflow-hidden p-1.5 transition-transform transform hover:scale-[1.02]`}
                 dangerouslySetInnerHTML={{ __html: svgContent }}
               />
             ) : null}
@@ -180,8 +223,18 @@ export default function StandArtworkModal({ plate, isOpen, onClose }: StandArtwo
                 </div>
                 <div className="space-y-2 text-xs text-slate-600">
                   <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60">
-                    <span className="text-slate-500">Desain Master:</span>
-                    <span className="font-semibold text-slate-800">Google 4-Color Signature</span>
+                    <span className="text-slate-500">Model Fisik:</span>
+                    <span className="font-semibold text-slate-800">
+                      {selectedFormat === "tent_a6"
+                        ? "Stand Meja Kasir L (A6)"
+                        : "Tempel Kaca & Etalase (1:1)"}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60">
+                    <span className="text-slate-500">Dimensi Akrilik:</span>
+                    <span className="font-semibold text-slate-800">
+                      {selectedFormat === "tent_a6" ? "10.5 × 14.8 cm" : "10.0 × 10.0 cm"}
+                    </span>
                   </div>
                   <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60">
                     <span className="text-slate-500">Kode Barcode / QR:</span>
@@ -190,12 +243,16 @@ export default function StandArtworkModal({ plate, isOpen, onClose }: StandArtwo
                     </span>
                   </div>
                   <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60">
-                    <span className="text-slate-500">Kesesuaian Model:</span>
-                    <span className="font-semibold text-slate-800">Tempel Kaca &amp; Stand Kasir L</span>
+                    <span className="text-slate-500">Desain Master:</span>
+                    <span className="font-semibold text-slate-800">Google 4-Color Signature</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-slate-500">Resolusi Vektor:</span>
-                    <span className="font-semibold text-slate-800">1024 x 1024 (HD 300+ DPI)</span>
+                    <span className="font-semibold text-slate-800">
+                      {selectedFormat === "tent_a6"
+                        ? "800 × 1130 px (HD Vektor)"
+                        : "1024 × 1024 px (HD 300+ DPI)"}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -204,10 +261,16 @@ export default function StandArtworkModal({ plate, isOpen, onClose }: StandArtwo
               <div className="p-3.5 bg-blue-50/60 border border-blue-200/80 rounded-2xl text-xs text-blue-950 space-y-1">
                 <div className="font-bold flex items-center gap-1.5 text-[#1A73E8]">
                   <CheckCircle2 className="w-4 h-4" />
-                  <span>Desain Universal Otentik</span>
+                  <span>
+                    {selectedFormat === "tent_a6"
+                      ? "Stand Kasir L-Stand Otentik"
+                      : "Plat Tempel Kaca Universal"}
+                  </span>
                 </div>
                 <p className="text-[11.5px] text-slate-600 leading-relaxed">
-                  Semua elemen desain (warna Google, logo G, ikon NFC Tap &amp; Scan) tetap konsisten persis foto asli. Yang membedakan tiap cetakan adalah <strong>matriks QR code</strong> dan <strong>nomor seri teknis</strong> di bawah barcode.
+                  {selectedFormat === "tent_a6"
+                    ? "Dudukan kasir berdiri dengan kemiringan ergonomis. Pelanggan dapat menempelkan HP (NFC) di kiri atau scan QR di kanan secara instan."
+                    : "Plat akrilik flat 10x10 cm untuk ditempel di pintu kaca, etalase, atau cermin kasir dengan double tape foam transparan."}
                 </p>
               </div>
 
@@ -235,7 +298,7 @@ export default function StandArtworkModal({ plate, isOpen, onClose }: StandArtwo
         {/* Footer Actions */}
         <div className="px-6 py-4 border-t border-slate-100 bg-slate-50/80 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-[11px] text-slate-500 text-center sm:text-left">
-            Siap cetak untuk Stand Meja Kasir Model L maupun Tempel Kaca / Etalase.
+            Siap cetak untuk {selectedFormat === "tent_a6" ? "Stand Meja Kasir Model L (10.5 × 14.8 cm)" : "Tempel Kaca / Etalase (10 × 10 cm)"}.
           </p>
           <div className="flex items-center gap-2.5 w-full sm:w-auto">
             <button
