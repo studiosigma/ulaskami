@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://ulaskami.id"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://ulaskami.com"),
   title: {
     default: "Ulaskami — Buat Bisnismu Semakin Direkomendasikan di Google Maps",
     template: "%s | Ulaskami",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     "NFC Bisnis",
     "Stand Akrilik Google Review",
   ],
-  authors: [{ name: "Ulaskami", url: "https://ulaskami.id" }],
+  authors: [{ name: "Ulaskami", url: "https://ulaskami.com" }],
   creator: "Ulaskami",
   publisher: "Ulaskami",
   icons: {
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "id_ID",
-    url: "https://ulaskami.id",
+    url: "https://ulaskami.com",
     title: "Ulaskami — Buat Bisnismu Semakin Direkomendasikan di Google Maps",
     description:
       "Permudah pelanggan memberikan ulasan di Google Maps dengan Ulaskami NFC + QR Review Plate. Buat bisnismu semakin direkomendasikan di Google Maps.",

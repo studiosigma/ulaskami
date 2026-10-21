@@ -101,7 +101,7 @@ export async function dispatchFeedbackWebhook(
     // Discord Embed Payload
     requestBody = {
       username: "Ulaskami Alert Bot",
-      avatar_url: "https://ulaskami.id/logo-icon.png",
+      avatar_url: "https://ulaskami.com/logo-icon.png",
       content: `🚨 **Peringatan Feedback Negatif Baru di ${feedback.businessName}**`,
       embeds: [
         {
@@ -144,7 +144,7 @@ export async function dispatchFeedbackWebhook(
           ],
           footer: {
             text: "Ulaskami Smart Review Platform",
-            icon_url: "https://ulaskami.id/logo-icon.png",
+            icon_url: "https://ulaskami.com/logo-icon.png",
           },
           timestamp: new Date().toISOString(),
         },

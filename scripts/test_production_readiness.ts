@@ -22,13 +22,13 @@ async function runProductionReadinessTests() {
   }
 
   // 1. Uji Konfigurasi Domain & Branding Resmi
-  assert(SITE_CONFIG.domain === "ulaskami.id", "Domain resmi disetel ke ulaskami.id");
-  assert(SITE_CONFIG.appUrl.includes("ulaskami.id"), `Base appUrl valid: ${SITE_CONFIG.appUrl}`);
-  assert(SITE_CONFIG.supportEmail.endsWith("@ulaskami.id"), `Email support resmi: ${SITE_CONFIG.supportEmail}`);
+  assert(SITE_CONFIG.domain === "ulaskami.com", "Domain resmi disetel ke ulaskami.com");
+  assert(SITE_CONFIG.appUrl.includes("ulaskami.com"), `Base appUrl valid: ${SITE_CONFIG.appUrl}`);
+  assert(SITE_CONFIG.supportEmail.endsWith("@ulaskami.com"), `Email support resmi: ${SITE_CONFIG.supportEmail}`);
 
   // 2. Uji Payload NFC & Kompatibilitas Hardware NTAG213 (144 bytes)
   const targetUrl = getNfcTargetUrl("ULK-000001");
-  assert(targetUrl === "https://ulaskami.id/r/ULK-000001", `Format URL tap NFC tepat: ${targetUrl}`);
+  assert(targetUrl === "https://ulaskami.com/r/ULK-000001", `Format URL tap NFC tepat: ${targetUrl}`);
 
   const nfcAnalysis = analyzeNfcPayload(targetUrl);
   assert(
@@ -67,7 +67,7 @@ async function runProductionReadinessTests() {
     Boolean(pwaManifest.name && pwaManifest.name.includes("Ulaskami")),
     `PWA Manifest name valid: ${pwaManifest.name || ""}`
   );
-  assert(pwaManifest.theme_color === "#16a34a", "PWA Manifest theme color disetel ke hijau Ulaskami");
+  assert(pwaManifest.theme_color === "#1a73e8", "PWA Manifest theme color disetel ke biru Google/Ulaskami");
   assert(pwaManifest.start_url === "/dashboard", "PWA start URL mengarah ke /dashboard");
 
   // 6. Uji Database Diagnostics Helper

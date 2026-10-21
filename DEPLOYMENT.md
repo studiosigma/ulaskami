@@ -14,7 +14,7 @@ cp .env.example .env.local
 
 | Variabel | Deskripsi | Nilai Contoh Produksi |
 | :--- | :--- | :--- |
-| `NEXT_PUBLIC_APP_URL` | Domain utama aplikasi | `https://ulaskami.id` |
+| `NEXT_PUBLIC_APP_URL` | Domain utama aplikasi | `https://ulaskami.com` |
 | `NEXT_PUBLIC_WHATSAPP_NUMBER` | Nomor CS & WhatsApp Pengaduan Masukan | `6281234567890` |
 | `DATABASE_URL` | String koneksi PostgreSQL (PAAS.ID / Neon / Supabase) | `postgresql://user:pass@db.paas.id:5432/ulaskami_db?sslmode=require` |
 | `SESSION_SECRET` | Kunci rahasia enkripsi sesi cookie merchant | `rahasia_acak_minimal_32_karakter_produksi` |
@@ -60,7 +60,7 @@ cp .env.example .env.local
 1. Push repository ke GitHub.
 2. Impor proyek ke [Vercel](https://vercel.com).
 3. Di tab **Settings -> Environment Variables**, masukkan:
-   - `NEXT_PUBLIC_APP_URL` = `https://ulaskami.id`
+   - `NEXT_PUBLIC_APP_URL` = `https://ulaskami.com`
    - `NEXT_PUBLIC_WHATSAPP_NUMBER` = `6281234567890`
    - `DATABASE_URL` = Koneksi PostgreSQL (Supabase / Neon / PAAS.ID)
 4. Klik **Deploy**. Vercel akan otomatis mengompilasi rute SSR, API handler, dan static asset.
@@ -82,7 +82,7 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
-      - NEXT_PUBLIC_APP_URL=https://ulaskami.id
+      - NEXT_PUBLIC_APP_URL=https://ulaskami.com
       - NEXT_PUBLIC_WHATSAPP_NUMBER=6281234567890
       - DATABASE_URL=postgresql://ulaskami_user:password@db:5432/ulaskami_prod
     depends_on:
@@ -109,7 +109,7 @@ volumes:
 Chip NFC fisik pada Ulaskami Plate menggunakan tipe **NTAG213** dengan kapasitas memori efektif **144 bytes**.
 
 ### Efisiensi Payload URL:
-- Format Target: `https://ulaskami.id/r/[KODE_PLATE]` (misal: `https://ulaskami.id/r/ULK-000001`).
+- Format Target: `https://ulaskami.com/r/[KODE_PLATE]` (misal: `https://ulaskami.com/r/ULK-000001`).
 - Panjang Karakter: **32 bytes**.
 - Overhead NDEF Record: **~4 bytes**.
 - Total Terpakai: **~36 bytes** (Hanya ~25% dari kapasitas 144B NTAG213).
@@ -119,7 +119,7 @@ Chip NFC fisik pada Ulaskami Plate menggunakan tipe **NTAG213** dengan kapasitas
 1. **Menggunakan Smartphone (Aplikasi NFC Tools):**
    - Buka aplikasi **NFC Tools** (Gratis di Android/iOS).
    - Masuk ke tab **Write** -> **Add a record** -> **Custom URL / URI**.
-   - Masukkan link: `https://ulaskami.id/r/ULK-XXXXXX`.
+   - Masukkan link: `https://ulaskami.com/r/ULK-XXXXXX`.
    - Tekan **Write** dan tempelkan ponsel ke stiker atau plat akrilik.
    - *(Disarankan sebelum pengiriman)*: Kunci chip menjadi *Read-Only* agar tautan tidak dapat diubah oleh pihak ketiga.
 
@@ -131,7 +131,7 @@ Chip NFC fisik pada Ulaskami Plate menggunakan tipe **NTAG213** dengan kapasitas
 
 ## 4. Checklist Pra-Peluncuran (*Go-Live Checklist*)
 
-- [ ] Domain `ulaskami.id` terhubung dengan sertifikat SSL HTTPS aktif.
+- [ ] Domain `ulaskami.com` terhubung dengan sertifikat SSL HTTPS aktif.
 - [ ] Script diagnosa `npm run db:check` lolos dengan status `✓ DITEMUKAN` dan terhubung ke PostgreSQL.
 - [ ] Pengujian tap tautan acak dialihkan dengan benar ke mode aktivasi (`/activate?code=ULK-XXXXXX`).
 - [ ] Pengujian plate teraktivasi dialihkan dengan benar ke review gate (`/review/ULK-000001`) atau Google Maps langsung.

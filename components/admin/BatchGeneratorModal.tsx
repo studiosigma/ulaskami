@@ -264,7 +264,7 @@ export default function BatchGeneratorModal({ isOpen, onClose, onSuccess }: Batc
                   </span>
                 </div>
                 <p className="text-[11px] text-slate-600">
-                  Payload tap: <code className="bg-slate-200 px-1 py-0.5 rounded font-mono text-slate-800">https://ulaskami.id/r/{result.startCode}</code> (~36 dari 144 bytes NTAG213).
+                  Payload tap: <code className="bg-slate-200 px-1 py-0.5 rounded font-mono text-slate-800">https://ulaskami.com/r/{result.startCode}</code> (~36 dari 144 bytes NTAG213).
                 </p>
                 <p className="text-[11px] text-slate-500">
                   Aplikasi Flashing: <strong>NFC Tools</strong> (Android / iOS) atau ACR122U USB Writer.

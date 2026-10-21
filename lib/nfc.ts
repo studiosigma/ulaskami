@@ -108,7 +108,7 @@ export const NFC_FLASHING_SOP = {
     {
       step: 2,
       title: "Pilih Tipe Record 'Custom URL / URI'",
-      desc: "Masukkan URL tap pendek plate: https://ulaskami.id/r/[KODE_PLATE].",
+      desc: "Masukkan URL tap pendek plate: https://ulaskami.com/r/[KODE_PLATE].",
     },
     {
       step: 3,

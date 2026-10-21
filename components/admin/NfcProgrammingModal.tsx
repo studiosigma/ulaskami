@@ -36,7 +36,7 @@ export default function NfcProgrammingModal({
   if (!isOpen) return null;
 
   const currentPlate = plates.find((p) => p.code === selectedPlateCode) || plates[0];
-  const baseUrl = typeof window !== "undefined" ? window.location.origin : "https://ulaskami.id";
+  const baseUrl = typeof window !== "undefined" ? window.location.origin : "https://ulaskami.com";
   const targetUrl = currentPlate ? `${baseUrl}/r/${currentPlate.code}` : `${baseUrl}/r/ULK-000001`;
 
   const handleCopyUrl = (url: string, code: string) => {
@@ -155,7 +155,7 @@ export default function NfcProgrammingModal({
                     Buka <strong>NFC Tools</strong> &rarr; Pilih tab <strong>Write</strong> &rarr; <strong>Add a record</strong> &rarr; Pilih <strong>URL / URI</strong>. Masukkan URL resmi plat masing-masing:
                   </p>
                   <div className="mt-2 p-2 bg-slate-100 rounded-lg font-mono text-[11px] font-bold text-blue-700">
-                    https://ulaskami.id/r/[KODE_PLAT]
+                    https://ulaskami.com/r/[KODE_PLAT]
                   </div>
                 </div>
 

@@ -78,7 +78,7 @@ async function getQrSvgInnerPaths(url: string): Promise<{ pathData: string; view
 export async function generatePlateSvg(options: GenerateArtworkOptions): Promise<string> {
   const {
     code,
-    baseUrl = "https://ulaskami.id",
+    baseUrl = "https://ulaskami.com",
     style = "google_color_badge",
     includeCropMarks = false,
   } = options;
@@ -248,7 +248,7 @@ export async function generatePlateSvg(options: GenerateArtworkOptions): Promise
   <g transform="translate(${standWidth / 2}, ${cardMarginY + cardHeight - 64})">
     ${cleanBusinessName ? `<text x="0" y="-12" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Google Sans', sans-serif" font-size="20" font-weight="700" fill="#111827">${cleanBusinessName}</text>` : ""}
     <text x="0" y="22" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="15" fill="#4B5563">
-      powered by <tspan fill="#1A73E8" font-weight="800">ulaskami.id</tspan>
+      powered by <tspan fill="#1A73E8" font-weight="800">ulaskami.com</tspan>
     </text>
   </g>
 
@@ -342,7 +342,7 @@ export async function generatePlateSvg(options: GenerateArtworkOptions): Promise
 
   <g transform="translate(200, 346)">
     <text x="0" y="4" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11.5" fill="#3c4043">
-      powered by <tspan fill="#1A73E8" font-weight="700">ulaskami.id</tspan>
+      powered by <tspan fill="#1A73E8" font-weight="700">ulaskami.com</tspan>
     </text>
   </g>
 

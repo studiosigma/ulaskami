@@ -10,7 +10,7 @@ export async function generateStandMejaKasirSvg(options: {
   const {
     code = "ULK-000001",
     businessName = "Kopi Kenangan Senopati (Demo)",
-    baseUrl = "https://ulaskami.id",
+    baseUrl = "https://ulaskami.com",
     includeCropMarks = true,
   } = options;
 
@@ -171,7 +171,7 @@ export async function generateStandMejaKasirSvg(options: {
   <g transform="translate(${width / 2}, ${cardMarginY + cardHeight - 64})">
     ${cleanBusinessName ? `<text x="0" y="-12" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Google Sans', sans-serif" font-size="20" font-weight="700" fill="#111827">${cleanBusinessName}</text>` : ""}
     <text x="0" y="22" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="15" fill="#4B5563">
-      powered by <tspan fill="#1A73E8" font-weight="800">ulaskami.id</tspan>
+      powered by <tspan fill="#1A73E8" font-weight="800">ulaskami.com</tspan>
     </text>
   </g>
 

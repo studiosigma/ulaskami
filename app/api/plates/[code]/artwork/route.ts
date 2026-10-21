@@ -21,7 +21,7 @@ export async function GET(
     const includeCropMarks = searchParams.get("cropMarks") === "true";
     const businessNameOverride = searchParams.get("businessName") || plate.businessName;
 
-    const origin = request.nextUrl.origin || "https://ulaskami.id";
+    const origin = request.nextUrl.origin || "https://ulaskami.com";
 
     const svgString = await generatePlateSvg({
       code,

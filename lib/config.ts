@@ -1,16 +1,16 @@
 export const SITE_CONFIG = {
   appName: "Ulaskami",
   tagline: "NFC + QR Review Plate untuk Bisnis Anda",
-  domain: "ulaskami.id",
-  appUrl: process.env.NEXT_PUBLIC_APP_URL || "https://ulaskami.id",
+  domain: "ulaskami.com",
+  appUrl: process.env.NEXT_PUBLIC_APP_URL || "https://ulaskami.com",
   whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "6281234567890",
-  supportEmail: "halo@ulaskami.id",
+  supportEmail: "halo@ulaskami.com",
 
   /**
    * Mengembalikan URL tap NFC dan QR resmi
    */
   getNfcRedirectUrl(code: string): string {
-    const base = (process.env.NEXT_PUBLIC_APP_URL || "https://ulaskami.id").replace(/\/$/, "");
+    const base = (process.env.NEXT_PUBLIC_APP_URL || "https://ulaskami.com").replace(/\/$/, "");
     return `${base}/r/${code}`;
   },
 

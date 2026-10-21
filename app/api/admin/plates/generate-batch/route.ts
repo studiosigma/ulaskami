@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     const createdPlates = await registerNewPlateBatch(codes);
 
     // Siapkan data CSV untuk mesin writer NFC / vendor cetak
-    const origin = request.nextUrl.origin || "https://ulaskami.id";
+    const origin = request.nextUrl.origin || "https://ulaskami.com";
     const csvRows = [
       ["Serial Code", "Activation URL", "NFC Payload Tap URL", "Status"],
       ...createdPlates.map((p) => [
