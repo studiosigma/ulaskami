@@ -67,39 +67,66 @@ cp .env.example .env.local
 
 ---
 
-### Opsi C: Deployment di VPS Ubuntu / Docker
+### Opsi C: Deployment di VPS Ubuntu / Docker (Rekomendasi Mandiri)
 
-Gunakan konfigurasi `docker-compose.yml` berikut:
+Proyek ini telah dilengkapi dengan `Dockerfile`, `docker-compose.yml`, dan `Caddyfile` (opsi otomatis HTTPS).
 
-```yaml
-version: "3.8"
+#### 1. Persiapan VPS Ubuntu (Jalankan via SSH)
+```bash
+# Update sistem
+sudo apt update && sudo apt upgrade -y
 
-services:
-  web:
-    build: .
-    restart: always
-    ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=production
-      - NEXT_PUBLIC_APP_URL=https://ulaskami.com
-      - NEXT_PUBLIC_WHATSAPP_NUMBER=6281234567890
-      - DATABASE_URL=postgresql://ulaskami_user:password@db:5432/ulaskami_prod
-    depends_on:
-      - db
+# Install Docker Engine & Docker Compose Plugin (Official script)
+curl -fsSL https://get.docker.com | sh
+sudo usermod -aG docker $USER
 
-  db:
-    image: postgres:16-alpine
-    restart: always
-    environment:
-      POSTGRES_USER: ulaskami_user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: ulaskami_prod
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+# Buka firewall (UFW)
+sudo ufw allow 22/tcp
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+sudo ufw allow 3000/tcp
+sudo ufw enable
+```
 
-volumes:
-  pgdata:
+#### 2. Clone Repository & Konfigurasi Lingkungan
+```bash
+# Clone repository
+git clone https://github.com/studiosigma/ulaskami.git /app/ulaskami
+cd /app/ulaskami
+
+# Buat file konfigurasi .env
+cp .env.example .env
+
+# Edit .env dan sesuaikan DOMAIN, NEXT_PUBLIC_APP_URL, dan POSTGRES_PASSWORD
+nano .env
+```
+
+#### 3. Menjalankan Layanan
+
+**Mode A: Menjalankan Aplikasi & Database PostgreSQL (Port 3000)**
+```bash
+docker compose up -d --build
+```
+
+**Mode B: Menjalankan Lengkap dengan Otomatis SSL HTTPS via Caddy (Port 80 & 443)**
+> Pastikan DNS Domain (A Record) sudah mengarah ke IP publik VPS Anda sebelum mengaktifkan profil SSL.
+```bash
+docker compose --profile ssl up -d --build
+```
+
+#### 4. Monitoring & Troubleshooting
+```bash
+# Cek status container
+docker compose ps
+
+# Lihat log aplikasi Next.js secara live
+docker compose logs -f web
+
+# Lihat log PostgreSQL
+docker compose logs -f db
+
+# Restart semua layanan
+docker compose restart
 ```
 
 ---

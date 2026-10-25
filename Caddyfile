@@ -1,0 +1,25 @@
+# ==============================================================================
+# ULASKAMI — CADDY REVERSE PROXY DENGAN OTOMATIS HTTPS (LET'S ENCRYPT)
+# ==============================================================================
+# Ganti ulaskami.com dengan domain atau subdomain Anda di file .env (variabel DOMAIN)
+
+{$DOMAIN:ulaskami.com} {
+    reverse_proxy web:3000
+
+    # Kompresi modern untuk loading super cepat
+    encode gzip zstd
+
+    # Header keamanan tambahan
+    header {
+        Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        Referrer-Policy "strict-origin-when-cross-origin"
+    }
+
+    # Logging akses
+    log {
+        output stdout
+        format console
+    }
+}

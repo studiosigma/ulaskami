@@ -1,0 +1,77 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-https://ulaskami.com}
+        NEXT_PUBLIC_WHATSAPP_NUMBER: ${NEXT_PUBLIC_WHATSAPP_NUMBER:-6281234567890}
+    container_name: ulaskami_web
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-https://ulaskami.com}
+      - NEXT_PUBLIC_WHATSAPP_NUMBER=${NEXT_PUBLIC_WHATSAPP_NUMBER:-6281234567890}
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-ulaskami_user}:${POSTGRES_PASSWORD:-ulaskami_secret_pass_2026}@db:5432/${POSTGRES_DB:-ulaskami_prod}?sslmode=disable
+      - SESSION_SECRET=${SESSION_SECRET:-ulaskami_super_secret_cookie_key_min32chars}
+      - ADMIN_EMAILS=${ADMIN_EMAILS:-admin@ulaskami.com}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - ulaskami_network
+
+  db:
+    image: postgres:16-alpine
+    container_name: ulaskami_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-ulaskami_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ulaskami_secret_pass_2026}
+      POSTGRES_DB: ${POSTGRES_DB:-ulaskami_prod}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-ulaskami_user} -d ${POSTGRES_DB:-ulaskami_prod}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ulaskami_network
+
+  # Reverse Proxy Caddy untuk otomatisasi sertifikat SSL HTTPS (Let's Encrypt)
+  # Aktifkan dengan perintah: docker compose --profile ssl up -d
+  caddy:
+    image: caddy:alpine
+    container_name: ulaskami_caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - DOMAIN=${DOMAIN:-ulaskami.com}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - web
+    profiles:
+      - ssl
+    networks:
+      - ulaskami_network
+
+volumes:
+  postgres_data:
+    name: ulaskami_postgres_data
+  caddy_data:
+    name: ulaskami_caddy_data
+  caddy_config:
+    name: ulaskami_caddy_config
+
+networks:
+  ulaskami_network:
+    name: ulaskami_network
+    driver: bridge
