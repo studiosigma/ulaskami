@@ -28,7 +28,8 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
-  output: "standalone",
+  // Hanya gunakan mode standalone saat di luar Vercel (misal: Docker / VPS)
+  output: process.env.VERCEL ? undefined : "standalone",
   async headers() {
     return [
       {

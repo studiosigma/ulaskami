@@ -9,7 +9,12 @@ declare global {
  */
 export function isDatabaseConfigured(): boolean {
   const url = process.env.DATABASE_URL?.trim();
-  return Boolean(url && url.length > 0 && !url.includes("username:password@host.paas.id"));
+  return Boolean(
+    url &&
+    url.length > 0 &&
+    !url.includes("username:password@host.paas.id") &&
+    url !== "value"
+  );
 }
 
 /**
@@ -26,8 +31,12 @@ export function getPool(): Pool | null {
       connectionString.includes("sslmode=require") ||
       connectionString.includes(".paas.id") ||
       connectionString.includes(".supabase.co") ||
+      connectionString.includes(".pooler.supabase.com") ||
       connectionString.includes(".render.com") ||
-      connectionString.includes("neon.tech");
+      connectionString.includes("neon.tech") ||
+      connectionString.includes("vercel-storage.com") ||
+      connectionString.includes("aivencloud.com") ||
+      Boolean(process.env.VERCEL && !connectionString.includes("localhost") && !connectionString.includes("127.0.0.1"));
 
     globalThis.__ulaskami_pg_pool__ = new Pool({
       connectionString,

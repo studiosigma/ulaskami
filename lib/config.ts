@@ -2,7 +2,9 @@ export const SITE_CONFIG = {
   appName: "Ulaskami",
   tagline: "NFC + QR Review Plate untuk Bisnis Anda",
   domain: "ulaskami.com",
-  appUrl: process.env.NEXT_PUBLIC_APP_URL || "https://ulaskami.com",
+  appUrl:
+    process.env.NEXT_PUBLIC_APP_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://ulaskami.com"),
   whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "6281234567890",
   supportEmail: "halo@ulaskami.com",
 
@@ -10,7 +12,10 @@ export const SITE_CONFIG = {
    * Mengembalikan URL tap NFC dan QR resmi
    */
   getNfcRedirectUrl(code: string): string {
-    const base = (process.env.NEXT_PUBLIC_APP_URL || "https://ulaskami.com").replace(/\/$/, "");
+    const base = (
+      process.env.NEXT_PUBLIC_APP_URL ||
+      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "https://ulaskami.com")
+    ).replace(/\/$/, "");
     return `${base}/r/${code}`;
   },
 
