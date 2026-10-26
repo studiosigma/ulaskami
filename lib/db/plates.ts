@@ -670,10 +670,18 @@ export async function getDataLayerInfo(): Promise<{
   label: string;
 }> {
   const isConfigured = isDatabaseConfigured();
+  let label = "In-Memory Hybrid (Safe Fallback)";
+  if (isConfigured) {
+    const url = process.env.DATABASE_URL || "";
+    if (url.includes("neon.tech")) label = "Neon PostgreSQL Cloud";
+    else if (url.includes("supabase.co") || url.includes("supabase.com")) label = "Supabase PostgreSQL Cloud";
+    else if (url.includes("paas.id")) label = "PaaS.ID PostgreSQL Cloud";
+    else label = "PostgreSQL Cloud Database";
+  }
   return {
     mode: isConfigured ? "postgres" : "memory",
     databaseUrlConfigured: isConfigured,
-    label: isConfigured ? "PAAS.ID PostgreSQL Cloud" : "In-Memory Hybrid (Safe Fallback)",
+    label,
   };
 }
 
